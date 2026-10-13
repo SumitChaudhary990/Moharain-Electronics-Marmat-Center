@@ -1,0 +1,53 @@
+================================================================================
+  MOHARAIN ELECTRONICS MARMAT CENTER
+  Location: Dhangadhi, Hasanpur-5, Kailali, Nepal
+  Standalone Software Installation & Update Package for Any Windows Computer
+================================================================================
+
+This folder contains everything needed to install, run, or update the software
+on any computer (no internet connection required).
+
+--------------------------------------------------------------------------------
+HOW TO INSTALL FOR THE FIRST TIME ON ANOTHER COMPUTER:
+--------------------------------------------------------------------------------
+
+OPTION 1: (RECOMMENDED) Official Windows Setup Wizard (.EXE)
+  1. Double-click "Moharain-Electronics-Setup.exe".
+  2. Follow the setup wizard steps.
+  3. The installer will automatically:
+     - Install the software on the PC.
+     - Create a desktop shortcut ("Moharain Electronics Marmat Center").
+     - Create a Start Menu shortcut.
+     - Add a clean Windows Uninstaller in Add/Remove Programs.
+
+OPTION 2: One-Click Windows Script Installer (.BAT)
+  1. Double-click "Install-Moharain-Electronics-Software.bat".
+  2. It installs the software into LocalAppData and places Desktop shortcuts.
+
+OPTION 3: Portable / Direct Run (No Installation Needed)
+  1. Double-click "Launch-Moharain-Electronics.bat" to open the app window.
+  2. OR simply double-click "index.html" in any web browser (Chrome, Edge, etc.).
+
+--------------------------------------------------------------------------------
+HOW TO UPDATE AN ALREADY INSTALLED COMPUTER:
+--------------------------------------------------------------------------------
+* IMPORTANT: Updating the software WILL NOT delete your existing inventory,
+  stock quantities, repair jobs, or user accounts! All data stays 100% safe.
+
+METHOD A: Run "Update-Software.bat" (Fastest - 2 Seconds)
+  1. Copy this folder to a USB drive and plug it into the target PC.
+  2. Double-click "Update-Software.bat".
+  3. It automatically updates the installed files in place. Done!
+
+METHOD B: Run "Moharain-Electronics-Setup.exe"
+  1. Double-click "Moharain-Electronics-Setup.exe" on the target PC.
+  2. Complete the setup wizard; it updates the old files with the new version.
+
+--------------------------------------------------------------------------------
+DEFAULT LOGIN CREDENTIALS (IF CONFIGURED):
+--------------------------------------------------------------------------------
+- Admin Account: admin
+- Staff Account: staff
+* Admin can add/remove users and reset passwords in the "Admin Access" tab.
+
+================================================================================
