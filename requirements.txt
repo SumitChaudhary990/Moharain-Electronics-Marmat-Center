@@ -1,0 +1,2 @@
+# Standard Python dependencies for Moharain Electronics
+# Server uses Python standard library http.server (no external dependencies required)
