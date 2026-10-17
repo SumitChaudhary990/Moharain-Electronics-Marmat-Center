@@ -785,6 +785,638 @@
       </div>
     </section>
 
+    
+    <!-- TAB 3.5: 🏛️ ACCOUNTING, GENERAL LEDGER & FINANCIAL ARCHITECTURE -->
+    <section id="tab-accounting" class="tab-section">
+      <!-- Section Header & Accounting Sub-Navigation -->
+      <div class="card" style="margin-bottom: 1.25rem;">
+        <div class="card-header" style="flex-wrap:wrap;gap:0.75rem;">
+          <div>
+            <div class="card-title" style="display:flex;align-items:center;gap:0.5rem;">
+              <span>🏛️</span> Financial Accounting, General Ledger &amp; Business Architecture
+            </div>
+            <p style="font-size:0.82rem;color:var(--muted);margin-top:0.2rem;">
+              Integrated double-entry bookkeeping, Accounts Receivable (AR), Accounts Payable (AP), Operating Expenses, Payroll &amp; Formal Financial Statements (P&amp;L / Balance Sheet).
+            </p>
+          </div>
+          <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+            <button type="button" class="btn btn-primary btn-sm" onclick="openAddExpenseModal()">+ New Expense</button>
+            <button type="button" class="btn btn-outline btn-sm" onclick="openAddVendorBillModal()">+ Vendor Bill (AP)</button>
+            <button type="button" class="btn btn-outline btn-sm" onclick="openManualJournalModal()">+ Journal Entry</button>
+          </div>
+        </div>
+
+        <!-- Sub-Navigation Bar -->
+        <div class="acc-subnav">
+          <button type="button" class="acc-subnav-btn active" id="acc-btn-overview" onclick="switchAccountingSubTab('overview', this)">📊 Financial Overview</button>
+          <button type="button" class="acc-subnav-btn" id="acc-btn-ledger" onclick="switchAccountingSubTab('ledger', this)">📖 General Ledger (GL)</button>
+          <button type="button" class="acc-subnav-btn" id="acc-btn-ar" onclick="switchAccountingSubTab('ar', this)">📥 Accounts Receivable (AR)</button>
+          <button type="button" class="acc-subnav-btn" id="acc-btn-ap" onclick="switchAccountingSubTab('ap', this)">📤 Accounts Payable (AP)</button>
+          <button type="button" class="acc-subnav-btn" id="acc-btn-expenses" onclick="switchAccountingSubTab('expenses', this)">💸 Expenses &amp; Costs</button>
+          <button type="button" class="acc-subnav-btn" id="acc-btn-payroll" onclick="switchAccountingSubTab('payroll', this)">👥 Payroll &amp; Wages</button>
+          <button type="button" class="acc-subnav-btn" id="acc-btn-statements" onclick="switchAccountingSubTab('statements', this)">📑 Financial Statements (P&amp;L)</button>
+          <button type="button" class="acc-subnav-btn" id="acc-btn-architecture" onclick="switchAccountingSubTab('architecture', this)" style="background:#eff6ff;color:#1e40af;border-color:#bfdbfe;">🏛️ Architecture Blueprint (6 Layers)</button>
+        </div>
+      </div>
+
+      <!-- SUB-VIEW 1: FINANCIAL OVERVIEW & KPIS -->
+      <div id="acc-view-overview" class="acc-section active">
+        <div class="fin-kpi-grid">
+          <div class="fin-kpi-card">
+            <div class="fin-kpi-title">Total Revenue</div>
+            <div class="fin-kpi-val" id="acc-kpi-revenue">Rs. 0.00</div>
+            <div class="fin-kpi-sub">POS Sales + Repair Services</div>
+          </div>
+          <div class="fin-kpi-card amber">
+            <div class="fin-kpi-title">Cost of Goods Sold (COGS)</div>
+            <div class="fin-kpi-val" id="acc-kpi-cogs">Rs. 0.00</div>
+            <div class="fin-kpi-sub">Stock &amp; spare parts consumed</div>
+          </div>
+          <div class="fin-kpi-card green">
+            <div class="fin-kpi-title">Gross Profit</div>
+            <div class="fin-kpi-val" id="acc-kpi-gross-profit">Rs. 0.00</div>
+            <div class="fin-kpi-sub" id="acc-kpi-gross-margin">Margin: 0.0%</div>
+          </div>
+          <div class="fin-kpi-card red">
+            <div class="fin-kpi-title">Operating Expenses</div>
+            <div class="fin-kpi-val" id="acc-kpi-expenses">Rs. 0.00</div>
+            <div class="fin-kpi-sub">Rent, Utilities, Wages &amp; Supplies</div>
+          </div>
+          <div class="fin-kpi-card green">
+            <div class="fin-kpi-title">Net Operating Profit</div>
+            <div class="fin-kpi-val" id="acc-kpi-net-profit">Rs. 0.00</div>
+            <div class="fin-kpi-sub" id="acc-kpi-net-margin">Net Margin: 0.0%</div>
+          </div>
+          <div class="fin-kpi-card purple">
+            <div class="fin-kpi-title">Accounts Receivable (AR)</div>
+            <div class="fin-kpi-val" id="acc-kpi-ar" style="color:#7c3aed;">Rs. 0.00</div>
+            <div class="fin-kpi-sub">Unpaid customer balances</div>
+          </div>
+          <div class="fin-kpi-card red">
+            <div class="fin-kpi-title">Accounts Payable (AP)</div>
+            <div class="fin-kpi-val" id="acc-kpi-ap" style="color:#dc2626;">Rs. 0.00</div>
+            <div class="fin-kpi-sub">Unpaid vendor/supplier bills</div>
+          </div>
+          <div class="fin-kpi-card slate">
+            <div class="fin-kpi-title">Cash &amp; Bank Balance</div>
+            <div class="fin-kpi-val" id="acc-kpi-cash">Rs. 0.00</div>
+            <div class="fin-kpi-sub">Estimated net cash liquidity</div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));gap:1.25rem;">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Quick Financial Operations</div>
+            </div>
+            <p style="font-size:0.85rem;color:var(--muted);margin-bottom:1rem;">
+              Direct shortcuts to record everyday financial events in Moharain Electronics:
+            </p>
+            <div style="display:flex;flex-direction:column;gap:0.6rem;">
+              <button type="button" class="btn btn-outline" style="justify-content:flex-start;text-align:left;" onclick="openAddExpenseModal()">
+                <strong>💸 Record Shop Expense</strong> &mdash; <span style="font-size:0.8rem;color:var(--muted);">Rent, electricity, tools, food, transport</span>
+              </button>
+              <button type="button" class="btn btn-outline" style="justify-content:flex-start;text-align:left;" onclick="openAddVendorBillModal()">
+                <strong>📤 Record Vendor Purchase (AP)</strong> &mdash; <span style="font-size:0.8rem;color:var(--muted);">Wholesale spare parts, supplier bills</span>
+              </button>
+              <button type="button" class="btn btn-outline" style="justify-content:flex-start;text-align:left;" onclick="switchAccountingSubTab('ar', document.getElementById('acc-btn-ar'))">
+                <strong>📥 Collect Customer Due (AR)</strong> &mdash; <span style="font-size:0.8rem;color:var(--muted);">Settle repair ticket balances due</span>
+              </button>
+              <button type="button" class="btn btn-outline" style="justify-content:flex-start;text-align:left;" onclick="openDisbursePayrollModal()">
+                <strong>👥 Disburse Technician Salary</strong> &mdash; <span style="font-size:0.8rem;color:var(--muted);">Monthly wages, bonus, deductions</span>
+              </button>
+              <button type="button" class="btn btn-outline" style="justify-content:flex-start;text-align:left;" onclick="openManualJournalModal()">
+                <strong>📖 Manual Journal Entry</strong> &mdash; <span style="font-size:0.8rem;color:var(--muted);">Capital investment, bank adjustments</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Accounting Health &amp; Solvency</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:0.75rem;font-size:0.88rem;">
+              <div style="display:flex;justify-content:space-between;border-bottom:1px solid #f1f5f9;padding-bottom:0.4rem;">
+                <span style="color:var(--muted);">Working Capital (Current Assets - Liabilities):</span>
+                <strong id="acc-health-working-capital">Rs. 0.00</strong>
+              </div>
+              <div style="display:flex;justify-content:space-between;border-bottom:1px solid #f1f5f9;padding-bottom:0.4rem;">
+                <span style="color:var(--muted);">Total Catalog Asset Valuation:</span>
+                <strong id="acc-health-inventory-val">Rs. 0.00</strong>
+              </div>
+              <div style="display:flex;justify-content:space-between;border-bottom:1px solid #f1f5f9;padding-bottom:0.4rem;">
+                <span style="color:var(--muted);">Total Customer Receivables Outstanding:</span>
+                <strong id="acc-health-ar-total" style="color:#7c3aed;">Rs. 0.00</strong>
+              </div>
+              <div style="display:flex;justify-content:space-between;border-bottom:1px solid #f1f5f9;padding-bottom:0.4rem;">
+                <span style="color:var(--muted);">Total Vendor Payables Outstanding:</span>
+                <strong id="acc-health-ap-total" style="color:#dc2626;">Rs. 0.00</strong>
+              </div>
+              <div style="display:flex;justify-content:space-between;border-bottom:1px solid #f1f5f9;padding-bottom:0.4rem;">
+                <span style="color:var(--muted);">Owner's Estimated Equity:</span>
+                <strong id="acc-health-equity" style="color:#16a34a;">Rs. 0.00</strong>
+              </div>
+              <div style="margin-top:0.5rem;padding:0.75rem;background:#f8fafc;border-radius:6px;border:1px solid #e2e8f0;font-size:0.8rem;color:#475569;">
+                💡 <em>All financial records adhere strictly to standard double-entry accounting and are synchronized in real-time with Nepal Standard Time (UTC+05:45).</em>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUB-VIEW 2: GENERAL LEDGER (GL) -->
+      <div id="acc-view-ledger" class="acc-section">
+        <div class="card">
+          <div class="card-header" style="flex-wrap:wrap;gap:0.75rem;">
+            <div>
+              <div class="card-title">📖 General Ledger Journal Register</div>
+              <div style="font-size:0.82rem;color:var(--muted);">Complete central repository of all financial debits and credits across the business.</div>
+            </div>
+            <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+              <button type="button" class="btn btn-outline btn-sm" onclick="exportLedgerCsv()">Export Ledger (.CSV)</button>
+              <button type="button" class="btn btn-primary btn-sm" onclick="openManualJournalModal()">+ Manual Journal Entry</button>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:1rem;">
+            <input type="text" id="gl-search-input" placeholder="Search account, memo, or staff..." style="flex:1;min-width:200px;padding:0.45rem 0.65rem;" oninput="renderLedgerTable()" />
+            <select id="gl-account-filter" style="width:220px;padding:0.45rem 0.65rem;" onchange="renderLedgerTable()">
+              <option value="">All Accounts</option>
+              <option value="1010 - Cash on Hand">1010 - Cash on Hand</option>
+              <option value="1020 - Bank / Digital Wallet">1020 - Bank / Digital Wallet</option>
+              <option value="1100 - Accounts Receivable">1100 - Accounts Receivable</option>
+              <option value="1200 - Inventory Asset">1200 - Inventory Asset</option>
+              <option value="2000 - Accounts Payable">2000 - Accounts Payable</option>
+              <option value="2100 - Customer Advances">2100 - Customer Advances</option>
+              <option value="3010 - Owner's Equity">3010 - Owner's Equity</option>
+              <option value="4010 - Sales Revenue">4010 - Sales Revenue</option>
+              <option value="4020 - Repair Service Revenue">4020 - Repair Service Revenue</option>
+              <option value="5010 - Cost of Goods Sold (COGS)">5010 - Cost of Goods Sold (COGS)</option>
+              <option value="6010 - Shop Rent Expense">6010 - Shop Rent Expense</option>
+              <option value="6020 - Electricity & Utilities">6020 - Electricity & Utilities</option>
+              <option value="6030 - Technician Salaries">6030 - Technician Salaries</option>
+              <option value="6040 - Workshop Tools & Supplies">6040 - Workshop Tools & Supplies</option>
+              <option value="6090 - Miscellaneous Expenses">6090 - Miscellaneous Expenses</option>
+            </select>
+          </div>
+
+          <div style="overflow-x:auto;">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date &amp; Time (NPT)</th>
+                  <th>Journal ID</th>
+                  <th>Account Head</th>
+                  <th>Ref / Memo / Customer / Vendor</th>
+                  <th>Debit (Rs.)</th>
+                  <th>Credit (Rs.)</th>
+                  <th>Recorded By</th>
+                </tr>
+              </thead>
+              <tbody id="ledger-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUB-VIEW 3: ACCOUNTS RECEIVABLE (AR) -->
+      <div id="acc-view-ar" class="acc-section">
+        <div class="card">
+          <div class="card-header" style="flex-wrap:wrap;gap:0.75rem;">
+            <div>
+              <div class="card-title">📥 Accounts Receivable (Customer Credit &amp; Dues)</div>
+              <div style="font-size:0.82rem;color:var(--muted);">Tracks all customer repair jobs and sales with outstanding due balances awaiting collection.</div>
+            </div>
+            <div style="display:flex;gap:0.5rem;align-items:center;">
+              <span class="badge" style="background:#f3e8ff;color:#7c3aed;font-weight:700;font-size:0.85rem;" id="ar-total-badge">Total Outstanding: Rs. 0.00</span>
+            </div>
+          </div>
+
+          <div style="margin-bottom:1rem;">
+            <input type="text" id="ar-search-input" placeholder="Search customer name, phone, or repair ticket..." style="width:100%;max-width:400px;padding:0.45rem 0.65rem;" oninput="renderArTable()" />
+          </div>
+
+          <div style="overflow-x:auto;">
+            <table>
+              <thead>
+                <tr>
+                  <th>Customer Name &amp; Phone</th>
+                  <th>Reference Ticket</th>
+                  <th>Device / Description</th>
+                  <th>Total Quote / Bill (Rs.)</th>
+                  <th>Advance Paid (Rs.)</th>
+                  <th>Final Paid (Rs.)</th>
+                  <th>Balance Due (Rs.)</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="ar-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUB-VIEW 4: ACCOUNTS PAYABLE (AP) -->
+      <div id="acc-view-ap" class="acc-section">
+        <div class="card">
+          <div class="card-header" style="flex-wrap:wrap;gap:0.75rem;">
+            <div>
+              <div class="card-title">📤 Accounts Payable (Vendor &amp; Supplier Invoices)</div>
+              <div style="font-size:0.82rem;color:var(--muted);">Tracks wholesale spare parts suppliers, hardware invoices, and upcoming payment obligations.</div>
+            </div>
+            <div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center;">
+              <span class="badge" style="background:#fee2e2;color:#dc2626;font-weight:700;font-size:0.85rem;" id="ap-total-badge">Total Supplier Due: Rs. 0.00</span>
+              <button type="button" class="btn btn-primary btn-sm" onclick="openAddVendorBillModal()">+ Add Vendor Invoice</button>
+            </div>
+          </div>
+
+          <div style="overflow-x:auto;">
+            <table>
+              <thead>
+                <tr>
+                  <th>Bill ID</th>
+                  <th>Vendor / Supplier</th>
+                  <th>Invoice #</th>
+                  <th>Date &amp; Due Date</th>
+                  <th>Description / Parts</th>
+                  <th>Total Bill (Rs.)</th>
+                  <th>Paid (Rs.)</th>
+                  <th>Balance Due (Rs.)</th>
+                  <th>Status</th>
+                  <th>Staff</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="ap-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUB-VIEW 5: EXPENSES & OPERATING COSTS -->
+      <div id="acc-view-expenses" class="acc-section">
+        <div class="card">
+          <div class="card-header" style="flex-wrap:wrap;gap:0.75rem;">
+            <div>
+              <div class="card-title">💸 Workshop Operating Expenses</div>
+              <div style="font-size:0.82rem;color:var(--muted);">Tracks daily workshop expenses, rent, utilities, tools, maintenance, and supplies.</div>
+            </div>
+            <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+              <button type="button" class="btn btn-outline btn-sm" onclick="exportExpensesCsv()">Export Expenses (.CSV)</button>
+              <button type="button" class="btn btn-primary btn-sm" onclick="openAddExpenseModal()">+ Record New Expense</button>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:1rem;">
+            <input type="text" id="expense-search-input" placeholder="Search payee, notes, or staff..." style="flex:1;min-width:200px;padding:0.45rem 0.65rem;" oninput="renderExpensesTable()" />
+            <select id="expense-cat-filter" style="width:200px;padding:0.45rem 0.65rem;" onchange="renderExpensesTable()">
+              <option value="">All Categories</option>
+              <option value="Rent">Shop Rent</option>
+              <option value="Electricity & Utilities">Electricity & Utilities</option>
+              <option value="Technician Salaries & Wages">Technician Salaries</option>
+              <option value="Workshop Tools & Consumables">Workshop Tools & Supplies</option>
+              <option value="Transport & Fuel">Transport & Fuel</option>
+              <option value="Tea & Refreshments">Tea & Refreshments</option>
+              <option value="Internet & Phone">Internet & Phone</option>
+              <option value="Miscellaneous">Miscellaneous</option>
+            </select>
+          </div>
+
+          <div style="overflow-x:auto;">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date (NPT)</th>
+                  <th>Expense ID</th>
+                  <th>Category</th>
+                  <th>Payee / Shop</th>
+                  <th>Amount (Rs.)</th>
+                  <th>Payment Method</th>
+                  <th>Recorded By</th>
+                  <th>Notes</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="expenses-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUB-VIEW 6: PAYROLL & SALARIES -->
+      <div id="acc-view-payroll" class="acc-section">
+        <div class="card">
+          <div class="card-header" style="flex-wrap:wrap;gap:0.75rem;">
+            <div>
+              <div class="card-title">👥 Workshop Staff Payroll &amp; Wage Management</div>
+              <div style="font-size:0.82rem;color:var(--muted);">Record salary disbursements, technician bonuses, advance deductions, and payment history.</div>
+            </div>
+            <div style="display:flex;gap:0.5rem;align-items:center;">
+              <button type="button" class="btn btn-primary btn-sm" onclick="openDisbursePayrollModal()">+ Disburse Salary</button>
+            </div>
+          </div>
+
+          <div style="overflow-x:auto;">
+            <table>
+              <thead>
+                <tr>
+                  <th>Disbursement ID</th>
+                  <th>Staff Member</th>
+                  <th>Pay Period</th>
+                  <th>Base Salary (Rs.)</th>
+                  <th>Bonus / Overtime (Rs.)</th>
+                  <th>Deductions (Rs.)</th>
+                  <th>Net Paid (Rs.)</th>
+                  <th>Disbursed At (NPT)</th>
+                  <th>Method</th>
+                  <th>Processed By</th>
+                </tr>
+              </thead>
+              <tbody id="payroll-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUB-VIEW 7: FINANCIAL STATEMENTS (P&L, BALANCE SHEET, CASH FLOW, VAT) -->
+      <div id="acc-view-statements" class="acc-section">
+        <div class="card">
+          <div class="card-header" style="flex-wrap:wrap;gap:0.75rem;">
+            <div>
+              <div class="card-title">📑 Formal Financial Statements</div>
+              <div style="font-size:0.82rem;color:var(--muted);">Standardized accounting reports ready for review, tax estimation, and physical printing.</div>
+            </div>
+            <div style="display:flex;gap:0.5rem;flex-wrap:wrap;" class="no-print">
+              <button type="button" class="btn btn-outline btn-sm active" id="stmt-tab-btn-pl" onclick="switchStatementType('pl')">Profit &amp; Loss (P&amp;L)</button>
+              <button type="button" class="btn btn-outline btn-sm" id="stmt-tab-btn-bs" onclick="switchStatementType('bs')">Balance Sheet</button>
+              <button type="button" class="btn btn-outline btn-sm" id="stmt-tab-btn-cf" onclick="switchStatementType('cf')">Cash Flow</button>
+              <button type="button" class="btn btn-outline btn-sm" id="stmt-tab-btn-tax" onclick="switchStatementType('tax')">Nepal VAT &amp; Tax (13%)</button>
+              <button type="button" class="btn btn-primary btn-sm" onclick="window.print()">🖨️ Print Statement</button>
+            </div>
+          </div>
+
+          <!-- Printable Sheet Area -->
+          <div class="fin-statement-sheet" id="financial-statement-container">
+            <!-- Dynamic Content rendered by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- SUB-VIEW 8: 🏛️ 6-LAYER ARCHITECTURE BLUEPRINT -->
+      <div id="acc-view-architecture" class="acc-section">
+        <div class="card">
+          <div class="card-header" style="flex-wrap:wrap;gap:0.75rem;">
+            <div>
+              <div class="card-title">🏛️ Accounting Software Architecture (6-Layer Enterprise Blueprint)</div>
+              <div style="font-size:0.82rem;color:var(--muted);">Architectural specifications and design models powering the Moharain Electronics System.</div>
+            </div>
+            <div>
+              <span class="badge badge-ok">Architecture Health: Optimal</span>
+            </div>
+          </div>
+
+          <!-- The Visual 6-Layer Architecture Stack matching user's image -->
+          <div class="arch-container">
+
+            <!-- LAYER 1: Presentation Layer -->
+            <div class="arch-layer-card arch-layer-1">
+              <div class="arch-layer-head">
+                <span>1. Presentation Layer (Frontend)</span>
+                <span class="arch-layer-sub">Desktop &amp; Web UI (Standalone PWA / React / Vue)</span>
+              </div>
+              <div class="arch-layer-body">
+                <div class="arch-modules-grid">
+                  <div class="arch-module-box">
+                    <div class="arch-module-icon">📊</div>
+                    <div class="arch-module-title">Dashboard &amp; KPIs</div>
+                    <div class="arch-module-desc">Financial overview, stock valuation, repair ticket metrics</div>
+                  </div>
+                  <div class="arch-module-box">
+                    <div class="arch-module-icon">📝</div>
+                    <div class="arch-module-title">Transaction Entry</div>
+                    <div class="arch-module-desc">POS sales counter, vendor bills, expense forms, repair intake</div>
+                  </div>
+                  <div class="arch-module-box">
+                    <div class="arch-module-icon">📈</div>
+                    <div class="arch-module-title">Financial Reports</div>
+                    <div class="arch-module-desc">Profit &amp; Loss, Balance Sheet, Cash Flow, Nepal VAT</div>
+                  </div>
+                  <div class="arch-module-box">
+                    <div class="arch-module-icon">👥</div>
+                    <div class="arch-module-title">User Management</div>
+                    <div class="arch-module-desc">Role-based access (Admin / Staff), PIN reset, auto-lock</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="arch-arrow">↓</div>
+
+            <!-- LAYER 2: Application Layer -->
+            <div class="arch-layer-card arch-layer-2">
+              <div class="arch-layer-head">
+                <span>2. Application Layer (Backend &amp; Business Services)</span>
+                <span class="arch-layer-sub">Core Services &amp; REST / WSGI API Layer</span>
+              </div>
+              <div class="arch-layer-body">
+                <div class="arch-modules-grid">
+                  <div class="arch-module-box">
+                    <div class="arch-module-icon">📖</div>
+                    <div class="arch-module-title">General Ledger</div>
+                    <div class="arch-module-desc">Central double-entry journal repository for all events</div>
+                  </div>
+                  <div class="arch-module-box">
+                    <div class="arch-module-icon">📤</div>
+                    <div class="arch-module-title">Accounts Payable (AP)</div>
+                    <div class="arch-module-desc">Vendor invoices, parts purchasing, aging &amp; payments</div>
+                  </div>
+                  <div class="arch-module-box">
+                    <div class="arch-module-icon">📥</div>
+                    <div class="arch-module-title">Accounts Receivable (AR)</div>
+                    <div class="arch-module-desc">Customer credit, repair balances, collections management</div>
+                  </div>
+                  <div class="arch-module-box">
+                    <div class="arch-module-icon">💼</div>
+                    <div class="arch-module-title">Payroll Module</div>
+                    <div class="arch-module-desc">Technician salaries, allowances, deductions &amp; slips</div>
+                  </div>
+                  <div class="arch-module-box">
+                    <div class="arch-module-icon">📦</div>
+                    <div class="arch-module-title">Inventory Management</div>
+                    <div class="arch-module-desc">Stock tracking, SKU sequencing, reorder points, COGS</div>
+                  </div>
+                  <div class="arch-module-box">
+                    <div class="arch-module-icon">🏛️</div>
+                    <div class="arch-module-title">Tax &amp; Compliance</div>
+                    <div class="arch-module-desc">Nepal 13% VAT, PAN invoicing, regulatory standards</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="arch-arrow">↓</div>
+
+            <!-- LAYER 3: Data Layer -->
+            <div class="arch-layer-card arch-layer-3">
+              <div class="arch-layer-head">
+                <span>3. Data Layer (Persistence &amp; Storage)</span>
+                <span class="arch-layer-sub">Relational DB, NoSQL, ORM &amp; Local Persistence Engine</span>
+              </div>
+              <div class="arch-layer-body">
+                <div class="arch-modules-grid">
+                  <div class="arch-module-box">
+                    <div class="arch-module-icon">🗄️</div>
+                    <div class="arch-module-title">SQL Database</div>
+                    <div class="arch-module-desc">Structured financial &amp; repair records (PostgreSQL / SQLite)</div>
+                  </div>
+                  <div class="arch-module-box">
+                    <div class="arch-module-icon">🍃</div>
+                    <div class="arch-module-title">NoSQL / Document Store</div>
+                    <div class="arch-module-desc">Audit logs, event streams, JSON snapshot archives</div>
+                  </div>
+                  <div class="arch-module-box">
+                    <div class="arch-module-icon">🏢</div>
+                    <div class="arch-module-title">Data Warehouse</div>
+                    <div class="arch-module-desc">BI analytics, historical growth &amp; workshop forecasting</div>
+                  </div>
+                  <div class="arch-module-box">
+                    <div class="arch-module-icon">📬</div>
+                    <div class="arch-module-title">Message Queues / Cache</div>
+                    <div class="arch-module-desc">Asynchronous event processing &amp; memory caching</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="arch-arrow">↓</div>
+
+            <!-- LAYER 4: Integration Layer -->
+            <div class="arch-layer-card arch-layer-4">
+              <div class="arch-layer-head">
+                <span>4. Integration Layer (External Ecosystem)</span>
+                <span class="arch-layer-sub">Payment Gateways, Banking APIs &amp; Government Portals</span>
+              </div>
+              <div class="arch-layer-body">
+                <div class="arch-modules-grid">
+                  <div class="arch-module-box">
+                    <div class="arch-module-icon">💳</div>
+                    <div class="arch-module-title">Banking &amp; Digital Wallets</div>
+                    <div class="arch-module-desc">eSewa, Khalti, FonePay QR, bank transfer reconciliations</div>
+                  </div>
+                  <div class="arch-module-box">
+                    <div class="arch-module-icon">📦</div>
+                    <div class="arch-module-title">ERP / CRM Systems</div>
+                    <div class="arch-module-desc">Wholesale hardware vendor catalogs &amp; customer CRM</div>
+                  </div>
+                  <div class="arch-module-box">
+                    <div class="arch-module-icon">🏛️</div>
+                    <div class="arch-module-title">Tax Portals</div>
+                    <div class="arch-module-desc">Inland Revenue Department (IRD Nepal) VAT/PAN export</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="arch-arrow">↓</div>
+
+            <!-- LAYER 5: Security & Compliance -->
+            <div class="arch-layer-card arch-layer-5">
+              <div class="arch-layer-head">
+                <span>5. Security &amp; Compliance Layer</span>
+                <span class="arch-layer-sub">RBAC, Encryption, Audit Trails &amp; GAAP/NAS Standards</span>
+              </div>
+              <div class="arch-layer-body">
+                <div class="arch-modules-grid">
+                  <div class="arch-module-box">
+                    <div class="arch-module-icon">🛡️</div>
+                    <div class="arch-module-title">Role-Based Access (RBAC)</div>
+                    <div class="arch-module-desc">Granular Admin vs Staff permissions &amp; idle auto-lock</div>
+                  </div>
+                  <div class="arch-module-box">
+                    <div class="arch-module-icon">🔒</div>
+                    <div class="arch-module-title">Encryption &amp; Protection</div>
+                    <div class="arch-module-desc">AES storage encryption &amp; TLS secure transport</div>
+                  </div>
+                  <div class="arch-module-box">
+                    <div class="arch-module-icon">📋</div>
+                    <div class="arch-module-title">Immutable Audit Trail</div>
+                    <div class="arch-module-desc">Every action stamped with active staff username &amp; Nepal time</div>
+                  </div>
+                  <div class="arch-module-box">
+                    <div class="arch-module-icon">⚖️</div>
+                    <div class="arch-module-title">Accounting Compliance</div>
+                    <div class="arch-module-desc">Adheres to GAAP, IFRS &amp; Nepal Accounting Standards (NAS)</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="arch-arrow">↓</div>
+
+            <!-- LAYER 6: Infrastructure Layer -->
+            <div class="arch-layer-card arch-layer-6">
+              <div class="arch-layer-head">
+                <span>6. Infrastructure Layer (Hosting &amp; DevOps)</span>
+                <span class="arch-layer-sub">Windows Desktop Standalone + Cloud (Render / AWS)</span>
+              </div>
+              <div class="arch-layer-body">
+                <div class="arch-modules-grid">
+                  <div class="arch-module-box">
+                    <div class="arch-module-icon">☁️</div>
+                    <div class="arch-module-title">Cloud &amp; On-Premise</div>
+                    <div class="arch-module-desc">Render Cloud Web Service + Windows Standalone Offline Mode</div>
+                  </div>
+                  <div class="arch-module-box">
+                    <div class="arch-module-icon">🐳</div>
+                    <div class="arch-module-title">Containerization</div>
+                    <div class="arch-module-desc">Docker + Gunicorn high-concurrency production runtime</div>
+                  </div>
+                  <div class="arch-module-box">
+                    <div class="arch-module-icon">📊</div>
+                    <div class="arch-module-title">Monitoring &amp; Telemetry</div>
+                    <div class="arch-module-desc">System health, disk persistence tracking &amp; error metrics</div>
+                  </div>
+                  <div class="arch-module-box">
+                    <div class="arch-module-icon">🚀</div>
+                    <div class="arch-module-title">CI / CD Automation</div>
+                    <div class="arch-module-desc">Inno Setup Installer Wizard + GitHub Render continuous deployment</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Example Flow Visualizer Box matching user's prompt -->
+          <div style="margin-top:1.5rem;padding:1.25rem;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;">
+            <h4 style="font-size:0.95rem;color:#1e3a8a;margin-bottom:0.75rem;">📊 End-to-End Accounting Flow (Example: Sales / Repair Invoice Lifecycle)</h4>
+            <div class="flow-step-box">
+              <div class="flow-step-num">1</div>
+              <div><strong>Presentation Layer:</strong> User completes sales counter bill or registers repair ticket in Frontend UI.</div>
+            </div>
+            <div class="flow-step-box">
+              <div class="flow-step-num">2</div>
+              <div><strong>Application Layer:</strong> Backend / Logic validates prices, deducts inventory stock (COGS), and posts due balances to <strong>Accounts Receivable (AR)</strong>.</div>
+            </div>
+            <div class="flow-step-box">
+              <div class="flow-step-num">3</div>
+              <div><strong>General Ledger:</strong> Double-entry journal transaction is recorded: <em>Debit Cash / AR</em>, <em>Credit Sales Revenue</em>, <em>Debit COGS</em>, <em>Credit Inventory Asset</em>.</div>
+            </div>
+            <div class="flow-step-box">
+              <div class="flow-step-num">4</div>
+              <div><strong>Data &amp; Security Layer:</strong> Entry is stored in persistent storage with immutable staff audit trail (<code>staffName</code>) and Nepal time.</div>
+            </div>
+            <div class="flow-step-box">
+              <div class="flow-step-num">5</div>
+              <div><strong>Reporting Module:</strong> Real-time dashboard, Profit &amp; Loss (P&amp;L), and Balance Sheet are updated instantly!</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
     <!-- TAB 4: REPORTING (LOW STOCK ALERTS, INVENTORY VALUATION, REPAIR SUMMARY, SALES SUMMARY) -->
     <section id="tab-reports" class="tab-section">
       <div class="card">
@@ -1190,6 +1822,289 @@
   <div id="toast" class="toast"></div>
 
   <!-- SECURITY LOCK OVERLAY (FULL-SCREEN LOGIN) -->
+  
+  <!-- MODAL: ADD EXPENSE -->
+  <div id="add-expense-overlay" class="edit-overlay">
+    <div class="edit-box edit-box-sm">
+      <div class="edit-box-header">
+        <div class="edit-box-title">💸 Record Operating Expense</div>
+        <button type="button" class="btn btn-outline btn-sm" onclick="closeAddExpenseModal()">✕</button>
+      </div>
+      <form id="add-expense-form" onsubmit="saveExpense(event)">
+        <div class="form-group" style="margin-bottom:0.75rem;">
+          <label>Category *</label>
+          <select id="exp-category" required style="width:100%;padding:0.45rem;">
+            <option value="Rent">Shop Rent</option>
+            <option value="Electricity & Utilities">Electricity &amp; Utilities (NEA)</option>
+            <option value="Technician Salaries & Wages">Technician Salaries &amp; Wages</option>
+            <option value="Workshop Tools & Consumables">Workshop Tools &amp; Consumables</option>
+            <option value="Transport & Fuel">Transport &amp; Fuel</option>
+            <option value="Tea & Refreshments">Tea, Refreshments &amp; Snacks</option>
+            <option value="Internet & Phone">Internet &amp; Phone (NTC/WiFi)</option>
+            <option value="Shop Maintenance & Hardware">Shop Maintenance &amp; Hardware</option>
+            <option value="Miscellaneous">Miscellaneous</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom:0.75rem;">
+          <label>Payee / Vendor / Person Paid *</label>
+          <input type="text" id="exp-payee" required placeholder="e.g. Landlord, NEA, Hardware Mart..." style="width:100%;padding:0.45rem;" />
+        </div>
+        <div class="form-group" style="margin-bottom:0.75rem;">
+          <label>Amount (Rs.) *</label>
+          <input type="number" step="0.01" min="1" id="exp-amount" required placeholder="0.00" style="width:100%;padding:0.45rem;font-weight:700;" />
+        </div>
+        <div class="form-group" style="margin-bottom:0.75rem;">
+          <label>Payment Method *</label>
+          <select id="exp-method" required style="width:100%;padding:0.45rem;">
+            <option value="Cash">Cash on Hand</option>
+            <option value="Bank Transfer">Bank Transfer / Cheque</option>
+            <option value="eSewa">eSewa Mobile Wallet</option>
+            <option value="Khalti">Khalti</option>
+            <option value="FonePay">FonePay QR</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom:0.75rem;">
+          <label>Bill / Voucher / Receipt Reference</label>
+          <input type="text" id="exp-ref" placeholder="e.g. NEA-9982, BILL-102" style="width:100%;padding:0.45rem;" />
+        </div>
+        <div class="form-group" style="margin-bottom:1rem;">
+          <label>Notes / Description</label>
+          <textarea id="exp-notes" rows="2" placeholder="Brief explanation of expense..." style="width:100%;padding:0.45rem;"></textarea>
+        </div>
+        <div style="display:flex;justify-content:flex-end;gap:0.5rem;">
+          <button type="button" class="btn btn-outline" onclick="closeAddExpenseModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Expense</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD VENDOR INVOICE (AP) -->
+  <div id="add-vendor-bill-overlay" class="edit-overlay">
+    <div class="edit-box edit-box-sm">
+      <div class="edit-box-header">
+        <div class="edit-box-title">📤 Add Vendor Purchase Bill (AP)</div>
+        <button type="button" class="btn btn-outline btn-sm" onclick="closeAddVendorBillModal()">✕</button>
+      </div>
+      <form id="add-vendor-bill-form" onsubmit="saveVendorBill(event)">
+        <div class="form-group" style="margin-bottom:0.75rem;">
+          <label>Vendor / Supplier Name *</label>
+          <input type="text" id="vap-vendor" required placeholder="e.g. Kathmandu Electronics Wholesalers" style="width:100%;padding:0.45rem;" />
+        </div>
+        <div class="form-group" style="margin-bottom:0.75rem;">
+          <label>Supplier Invoice / Bill # *</label>
+          <input type="text" id="vap-inv-num" required placeholder="e.g. INV-8821" style="width:100%;padding:0.45rem;" />
+        </div>
+        <div class="form-group" style="margin-bottom:0.75rem;">
+          <label>Total Bill Amount (Rs.) *</label>
+          <input type="number" step="0.01" min="1" id="vap-total" required placeholder="0.00" style="width:100%;padding:0.45rem;font-weight:700;" oninput="updateVapBalancePreview()" />
+        </div>
+        <div class="form-group" style="margin-bottom:0.75rem;">
+          <label>Amount Paid Now (Rs.)</label>
+          <input type="number" step="0.01" min="0" id="vap-paid" value="0" style="width:100%;padding:0.45rem;" oninput="updateVapBalancePreview()" />
+        </div>
+        <div class="form-group" style="margin-bottom:0.75rem;">
+          <label>Remaining Balance Due (Rs.)</label>
+          <input type="text" id="vap-balance-preview" readonly value="Rs. 0.00" style="width:100%;padding:0.45rem;background:#f1f5f9;font-weight:700;color:#dc2626;" />
+        </div>
+        <div class="form-group" style="margin-bottom:0.75rem;">
+          <label>Payment Due Date</label>
+          <input type="date" id="vap-due-date" style="width:100%;padding:0.45rem;" />
+        </div>
+        <div class="form-group" style="margin-bottom:1rem;">
+          <label>Parts / Goods Description</label>
+          <textarea id="vap-desc" rows="2" placeholder="e.g. Display screens, IC chips, capacitors..." style="width:100%;padding:0.45rem;"></textarea>
+        </div>
+        <div style="display:flex;justify-content:flex-end;gap:0.5rem;">
+          <button type="button" class="btn btn-outline" onclick="closeAddVendorBillModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Vendor Bill</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: PAY VENDOR (SETTLE AP) -->
+  <div id="pay-vendor-overlay" class="edit-overlay">
+    <div class="edit-box edit-box-sm">
+      <div class="edit-box-header">
+        <div class="edit-box-title">💸 Settle Vendor Bill (Accounts Payable)</div>
+        <button type="button" class="btn btn-outline btn-sm" onclick="closePayVendorModal()">✕</button>
+      </div>
+      <form id="pay-vendor-form" onsubmit="confirmPayVendor(event)">
+        <input type="hidden" id="pay-v-id" />
+        <div style="background:#f8fafc;padding:0.75rem;border-radius:6px;margin-bottom:1rem;border:1px solid #e2e8f0;font-size:0.88rem;">
+          <div>Vendor: <strong id="pay-v-vendor"></strong></div>
+          <div>Invoice: <code id="pay-v-inv"></code></div>
+          <div style="margin-top:0.25rem;">Current Balance Due: <strong id="pay-v-due" style="color:#dc2626;"></strong></div>
+        </div>
+        <div class="form-group" style="margin-bottom:0.75rem;">
+          <label>Payment Amount (Rs.) *</label>
+          <input type="number" step="0.01" min="0.01" id="pay-v-amount" required style="width:100%;padding:0.45rem;font-weight:700;" />
+        </div>
+        <div class="form-group" style="margin-bottom:0.75rem;">
+          <label>Payment Method *</label>
+          <select id="pay-v-method" required style="width:100%;padding:0.45rem;">
+            <option value="Cash">Cash on Hand</option>
+            <option value="Bank Transfer">Bank Transfer / Cheque</option>
+            <option value="eSewa">eSewa Mobile Wallet</option>
+            <option value="Khalti">Khalti</option>
+            <option value="FonePay">FonePay QR</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom:1rem;">
+          <label>Payment Cheque / Ref #</label>
+          <input type="text" id="pay-v-ref" placeholder="Optional reference #..." style="width:100%;padding:0.45rem;" />
+        </div>
+        <div style="display:flex;justify-content:flex-end;gap:0.5rem;">
+          <button type="button" class="btn btn-outline" onclick="closePayVendorModal()">Cancel</button>
+          <button type="submit" class="btn btn-success">Confirm Payment</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: COLLECT CUSTOMER PAYMENT (SETTLE AR) -->
+  <div id="collect-ar-overlay" class="edit-overlay">
+    <div class="edit-box edit-box-sm">
+      <div class="edit-box-header">
+        <div class="edit-box-title">📥 Collect Customer Due (Accounts Receivable)</div>
+        <button type="button" class="btn btn-outline btn-sm" onclick="closeCollectArModal()">✕</button>
+      </div>
+      <form id="collect-ar-form" onsubmit="confirmCollectAr(event)">
+        <input type="hidden" id="col-ar-repair-id" />
+        <div style="background:#f8fafc;padding:0.75rem;border-radius:6px;margin-bottom:1rem;border:1px solid #e2e8f0;font-size:0.88rem;">
+          <div>Customer: <strong id="col-ar-customer"></strong> (<span id="col-ar-phone"></span>)</div>
+          <div>Ticket: <code id="col-ar-ticket"></code></div>
+          <div style="margin-top:0.25rem;">Outstanding Due: <strong id="col-ar-due" style="color:#dc2626;"></strong></div>
+        </div>
+        <div class="form-group" style="margin-bottom:0.75rem;">
+          <label>Amount Collecting Now (Rs.) *</label>
+          <input type="number" step="0.01" min="0.01" id="col-ar-amount" required style="width:100%;padding:0.45rem;font-weight:700;" />
+        </div>
+        <div class="form-group" style="margin-bottom:0.75rem;">
+          <label>Payment Method *</label>
+          <select id="col-ar-method" required style="width:100%;padding:0.45rem;">
+            <option value="Cash">Cash on Hand</option>
+            <option value="FonePay">FonePay QR</option>
+            <option value="eSewa">eSewa Mobile Wallet</option>
+            <option value="Khalti">Khalti</option>
+            <option value="Bank Transfer">Bank Transfer</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom:1rem;">
+          <label>Receipt Note / Payment Ref</label>
+          <input type="text" id="col-ar-ref" placeholder="Optional note or reference..." style="width:100%;padding:0.45rem;" />
+        </div>
+        <div style="display:flex;justify-content:flex-end;gap:0.5rem;">
+          <button type="button" class="btn btn-outline" onclick="closeCollectArModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Receive Payment</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: MANUAL JOURNAL ENTRY -->
+  <div id="manual-journal-overlay" class="edit-overlay">
+    <div class="edit-box edit-box-sm">
+      <div class="edit-box-header">
+        <div class="edit-box-title">📖 Manual Journal Entry (Double Entry)</div>
+        <button type="button" class="btn btn-outline btn-sm" onclick="closeManualJournalModal()">✕</button>
+      </div>
+      <form id="manual-journal-form" onsubmit="saveManualJournal(event)">
+        <div class="form-group" style="margin-bottom:0.75rem;">
+          <label>Debit Account (Receiving Account) *</label>
+          <select id="mj-debit" required style="width:100%;padding:0.45rem;">
+            <option value="1010 - Cash on Hand">1010 - Cash on Hand (Asset)</option>
+            <option value="1020 - Bank / Digital Wallet">1020 - Bank / Digital Wallet (Asset)</option>
+            <option value="1100 - Accounts Receivable">1100 - Accounts Receivable (Asset)</option>
+            <option value="1200 - Inventory Asset">1200 - Inventory Asset (Asset)</option>
+            <option value="2000 - Accounts Payable">2000 - Accounts Payable (Liability decrease)</option>
+            <option value="6010 - Shop Rent Expense">6010 - Shop Rent Expense</option>
+            <option value="6020 - Electricity & Utilities">6020 - Electricity & Utilities</option>
+            <option value="6030 - Technician Salaries">6030 - Technician Salaries</option>
+            <option value="6040 - Workshop Tools & Supplies">6040 - Workshop Tools & Supplies</option>
+            <option value="6090 - Miscellaneous Expenses">6090 - Miscellaneous Expenses</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom:0.75rem;">
+          <label>Credit Account (Giving Account) *</label>
+          <select id="mj-credit" required style="width:100%;padding:0.45rem;">
+            <option value="3010 - Owner's Equity">3010 - Owner's Equity / Capital (Equity)</option>
+            <option value="1010 - Cash on Hand">1010 - Cash on Hand (Asset decrease)</option>
+            <option value="1020 - Bank / Digital Wallet">1020 - Bank / Digital Wallet (Asset decrease)</option>
+            <option value="2000 - Accounts Payable">2000 - Accounts Payable (Liability)</option>
+            <option value="4010 - Sales Revenue">4010 - Sales Revenue (Revenue)</option>
+            <option value="4020 - Repair Service Revenue">4020 - Repair Service Revenue (Revenue)</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom:0.75rem;">
+          <label>Amount (Rs.) *</label>
+          <input type="number" step="0.01" min="1" id="mj-amount" required placeholder="0.00" style="width:100%;padding:0.45rem;font-weight:700;" />
+        </div>
+        <div class="form-group" style="margin-bottom:1rem;">
+          <label>Memo / Reference Description *</label>
+          <input type="text" id="mj-memo" required placeholder="e.g. Owner capital injection, cash to bank transfer..." style="width:100%;padding:0.45rem;" />
+        </div>
+        <div style="display:flex;justify-content:flex-end;gap:0.5rem;">
+          <button type="button" class="btn btn-outline" onclick="closeManualJournalModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Post Journal Entry</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: DISBURSE PAYROLL -->
+  <div id="disburse-payroll-overlay" class="edit-overlay">
+    <div class="edit-box edit-box-sm">
+      <div class="edit-box-header">
+        <div class="edit-box-title">👥 Disburse Staff Salary / Wage</div>
+        <button type="button" class="btn btn-outline btn-sm" onclick="closeDisbursePayrollModal()">✕</button>
+      </div>
+      <form id="disburse-payroll-form" onsubmit="confirmDisbursePayroll(event)">
+        <div class="form-group" style="margin-bottom:0.75rem;">
+          <label>Staff Member *</label>
+          <select id="pay-staff-select" required style="width:100%;padding:0.45rem;"></select>
+        </div>
+        <div class="form-group" style="margin-bottom:0.75rem;">
+          <label>Pay Period / Month *</label>
+          <input type="text" id="pay-period" required placeholder="e.g. Ashwin 2083 (Oct 2026)" style="width:100%;padding:0.45rem;" />
+        </div>
+        <div class="form-group" style="margin-bottom:0.75rem;">
+          <label>Base Salary (Rs.) *</label>
+          <input type="number" step="0.01" min="0" id="pay-base" required value="20000" style="width:100%;padding:0.45rem;" oninput="updatePayrollNetPreview()" />
+        </div>
+        <div class="form-group" style="margin-bottom:0.75rem;">
+          <label>Bonus / Overtime / Festival (Rs.)</label>
+          <input type="number" step="0.01" min="0" id="pay-bonus" value="0" style="width:100%;padding:0.45rem;" oninput="updatePayrollNetPreview()" />
+        </div>
+        <div class="form-group" style="margin-bottom:0.75rem;">
+          <label>Advance / Loan Deductions (Rs.)</label>
+          <input type="number" step="0.01" min="0" id="pay-deductions" value="0" style="width:100%;padding:0.45rem;" oninput="updatePayrollNetPreview()" />
+        </div>
+        <div class="form-group" style="margin-bottom:0.75rem;">
+          <label>Net Payable (Rs.)</label>
+          <input type="text" id="pay-net-preview" readonly value="Rs. 20,000.00" style="width:100%;padding:0.45rem;background:#f0fdf4;font-weight:700;color:#166534;" />
+        </div>
+        <div class="form-group" style="margin-bottom:0.75rem;">
+          <label>Payment Method *</label>
+          <select id="pay-method" required style="width:100%;padding:0.45rem;">
+            <option value="Cash">Cash on Hand</option>
+            <option value="Bank Transfer">Bank Transfer / Cheque</option>
+            <option value="eSewa">eSewa Mobile Wallet</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom:1rem;">
+          <label>Notes / Remarks</label>
+          <input type="text" id="pay-notes" placeholder="e.g. Monthly workshop salary" style="width:100%;padding:0.45rem;" />
+        </div>
+        <div style="display:flex;justify-content:flex-end;gap:0.5rem;">
+          <button type="button" class="btn btn-outline" onclick="closeDisbursePayrollModal()">Cancel</button>
+          <button type="submit" class="btn btn-success">Disburse &amp; Post</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <div id="security-lock-overlay" class="security-lock-overlay">
     <div class="security-lock-card">
       <div style="text-align:center;margin-bottom:1.15rem;">
@@ -1737,10 +2652,18 @@
     const STORAGE_KEY = 'electrotrack_final_inventory';
     const TX_STORAGE_KEY = 'electrotrack_final_transactions';
     const REPAIR_STORAGE_KEY = 'electrotrack_final_repairs';
+    const EXPENSES_STORAGE_KEY = 'electrotrack_expenses_v1';
+    const VENDOR_AP_STORAGE_KEY = 'electrotrack_vendor_ap_v1';
+    const PAYROLL_STORAGE_KEY = 'electrotrack_payroll_v1';
+    const LEDGER_STORAGE_KEY = 'electrotrack_ledger_v1';
 
     let items = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
     let transactions = JSON.parse(localStorage.getItem(TX_STORAGE_KEY)) || [];
     let repairs = JSON.parse(localStorage.getItem(REPAIR_STORAGE_KEY)) || [];
+    let expenses = JSON.parse(localStorage.getItem(EXPENSES_STORAGE_KEY)) || getDefaultExpenses();
+    let vendorBills = JSON.parse(localStorage.getItem(VENDOR_AP_STORAGE_KEY)) || getDefaultVendorBills();
+    let payrollRecords = JSON.parse(localStorage.getItem(PAYROLL_STORAGE_KEY)) || getDefaultPayroll();
+    let ledgerEntries = JSON.parse(localStorage.getItem(LEDGER_STORAGE_KEY)) || getDefaultLedger();
     let pendingDeleteAction = null;
     let selectedHistoryIds = new Set();
     let historySearchQuery = '';
@@ -1753,6 +2676,10 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
       localStorage.setItem(TX_STORAGE_KEY, JSON.stringify(transactions));
       localStorage.setItem(REPAIR_STORAGE_KEY, JSON.stringify(repairs));
+      localStorage.setItem(EXPENSES_STORAGE_KEY, JSON.stringify(expenses));
+      localStorage.setItem(VENDOR_AP_STORAGE_KEY, JSON.stringify(vendorBills));
+      localStorage.setItem(PAYROLL_STORAGE_KEY, JSON.stringify(payrollRecords));
+      localStorage.setItem(LEDGER_STORAGE_KEY, JSON.stringify(ledgerEntries));
       renderAll();
     }
 
@@ -1771,8 +2698,8 @@
           showToast('Admin Access Required: Staff are not permitted to add new items.');
           return;
         }
-        if ((tabId === 'reports' || tabId === 'backup') && !cfg.staffCanViewReports) {
-          showToast('Admin Access Required: Financial Reports & Data Backup are restricted to Admin.');
+        if ((tabId === 'reports' || tabId === 'backup' || tabId === 'accounting') && !cfg.staffCanViewReports) {
+          showToast('Admin Access Required: Financial Reports, Ledger & Data Backup are restricted to Admin.');
           return;
         }
       }
@@ -2245,6 +3172,10 @@
       };
 
       repairs.unshift(newRepair);
+      if (typeof postLedgerDoubleEntry === 'function' && newRepair.advancePaid > 0) {
+        const staff = (typeof getActiveUser === 'function' ? getActiveUser() : '') || 'admin';
+        postLedgerDoubleEntry('ADV-' + Date.now().toString().slice(-4), '1010 - Cash on Hand', '2100 - Customer Advances', newRepair.advancePaid, `Repair advance for ticket ${newRepair.ticketId} (${newRepair.customerName})`, staff);
+      }
       saveState();
       e.target.reset();
       document.getElementById('r-cost').value = '0';
@@ -2644,6 +3575,9 @@
           unitPrice: line.unitPrice,
           totalAmount: lineNetAmount
         });
+        if (typeof postLedgerDoubleEntry === 'function' && lineNetAmount > 0) {
+          postLedgerDoubleEntry('SAL-' + Date.now().toString().slice(-4), '1010 - Cash on Hand', '4010 - Sales Revenue', lineNetAmount, `POS Sale of ${line.qty}x ${invItem.name}`, currentStaffUser);
+        }
       });
 
       sellCart = [];
@@ -2870,6 +3804,10 @@
         unitPrice: part.unitPrice,
         totalAmount: qtyToUse * part.unitPrice
       });
+
+      if (typeof postLedgerDoubleEntry === 'function') {
+        postLedgerDoubleEntry('REP-PART-' + Date.now().toString().slice(-4), '5010 - Cost of Goods Sold (COGS)', '1200 - Inventory Asset', qtyToUse * part.unitPrice, `Spare part ${part.name} used in ticket ${job.ticketId}`, currentStaffUser);
+      }
 
       closeUsePartBox();
       saveState();
@@ -3927,9 +4865,15 @@
         timeZone: 'Asia/Kathmandu (UTC+05:45)',
         itemCount: items.length,
         repairCount: repairs.length,
+        expenseCount: expenses.length,
+        vendorBillCount: vendorBills.length,
         items,
         repairs,
-        transactions
+        transactions,
+        expenses,
+        vendorBills,
+        payrollRecords,
+        ledgerEntries
       };
       const blob = new Blob([JSON.stringify(snapshot, null, 2)], { type: 'application/json' });
       const a = document.createElement('a');
@@ -4000,9 +4944,13 @@
             items = data.items;
             repairs = Array.isArray(data.repairs) ? data.repairs : [];
             transactions = Array.isArray(data.transactions) ? data.transactions : [];
+            if (Array.isArray(data.expenses)) expenses = data.expenses;
+            if (Array.isArray(data.vendorBills)) vendorBills = data.vendorBills;
+            if (Array.isArray(data.payrollRecords)) payrollRecords = data.payrollRecords;
+            if (Array.isArray(data.ledgerEntries)) ledgerEntries = data.ledgerEntries;
             normalizeSequentialIds();
             saveState();
-            showToast(`Restored ${items.length} items and ${repairs.length} repair jobs!`);
+            showToast(`Restored ${items.length} items, ${repairs.length} repairs, and accounting records!`);
           }
         } catch (err) {
           showToast('Invalid backup JSON file.');
@@ -4700,6 +5648,1075 @@
       }
     }
 
+
+    /* =========================================================================
+       🏛️ ACCOUNTING, GENERAL LEDGER & FINANCIAL ARCHITECTURE ENGINE
+       ========================================================================= */
+
+    function getDefaultExpenses() {
+      const now = new Date();
+      return [
+        {
+          id: 'EXP-1001',
+          date: getNepalTimestamp(new Date(now.getTime() - 86400000 * 3)),
+          category: 'Rent',
+          payee: 'Hasanpur Commercial Building',
+          amount: 15000,
+          method: 'Bank Transfer',
+          refNo: 'CHQ-99120',
+          notes: 'Workshop monthly rent for Ashwin 2083',
+          staffName: 'admin'
+        },
+        {
+          id: 'EXP-1002',
+          date: getNepalTimestamp(new Date(now.getTime() - 86400000 * 2)),
+          category: 'Electricity & Utilities',
+          payee: 'Nepal Electricity Authority (NEA)',
+          amount: 2850,
+          method: 'eSewa',
+          refNo: 'NEA-882103',
+          notes: 'Shop electric meter bill',
+          staffName: 'staff'
+        },
+        {
+          id: 'EXP-1003',
+          date: getNepalTimestamp(new Date(now.getTime() - 86400000 * 1)),
+          category: 'Workshop Tools & Consumables',
+          payee: 'Dhangadhi Hardware Mart',
+          amount: 1450,
+          method: 'Cash',
+          refNo: 'BILL-4412',
+          notes: 'Soldering wire 60/40, rosin flux, desolder braid',
+          staffName: 'staff'
+        },
+        {
+          id: 'EXP-1004',
+          date: getNepalTimestamp(now),
+          category: 'Internet & Phone',
+          payee: 'Nepal Telecom (NTC)',
+          amount: 1200,
+          method: 'FonePay',
+          refNo: 'NTC-FTTH-882',
+          notes: 'Monthly workshop broadband WiFi',
+          staffName: 'admin'
+        }
+      ];
+    }
+
+    function getDefaultVendorBills() {
+      return [
+        {
+          id: 'VAP-1001',
+          vendorName: 'Kathmandu Electronics Wholesalers',
+          invoiceNumber: 'KEW-8812',
+          invoiceDate: '2026-10-10',
+          dueDate: '2026-10-25',
+          description: 'Display panels, power ICs, capacitors package',
+          totalAmount: 25000,
+          paidAmount: 15000,
+          balanceDue: 10000,
+          status: 'Partial',
+          staffName: 'admin'
+        },
+        {
+          id: 'VAP-1002',
+          vendorName: 'Birgunj Hardware & Component Mart',
+          invoiceNumber: 'BHC-3391',
+          invoiceDate: '2026-10-12',
+          dueDate: '2026-10-27',
+          description: 'Digital Multimeter probes, SMD rework nozzles',
+          totalAmount: 6500,
+          paidAmount: 6500,
+          balanceDue: 0,
+          status: 'Paid',
+          staffName: 'admin'
+        },
+        {
+          id: 'VAP-1003',
+          vendorName: 'Apex Electronics Distributers',
+          invoiceNumber: 'AED-5012',
+          invoiceDate: '2026-10-14',
+          dueDate: '2026-10-29',
+          description: 'DC Power Supply 30V 5A, BGA stencils',
+          totalAmount: 12000,
+          paidAmount: 4000,
+          balanceDue: 8000,
+          status: 'Partial',
+          staffName: 'admin'
+        }
+      ];
+    }
+
+    function getDefaultPayroll() {
+      const now = new Date();
+      return [
+        {
+          id: 'PAY-1001',
+          staffUser: 'staff',
+          staffName: 'Workshop Staff',
+          period: 'Ashwin 2083 (Oct 2026)',
+          baseSalary: 20000,
+          bonus: 2500,
+          deductions: 500,
+          netPayable: 22000,
+          disbursedAt: getNepalTimestamp(new Date(now.getTime() - 86400000 * 2)),
+          method: 'Bank Transfer',
+          notes: 'Monthly workshop technician wage + festival allowance',
+          processedBy: 'admin'
+        }
+      ];
+    }
+
+    function getDefaultLedger() {
+      const now = new Date();
+      const ts1 = getNepalTimestamp(new Date(now.getTime() - 86400000 * 10));
+      const ts2 = getNepalTimestamp(new Date(now.getTime() - 86400000 * 5));
+      return [
+        {
+          id: 'JRN-1001',
+          timestamp: ts1,
+          account: '1010 - Cash on Hand',
+          type: 'Debit',
+          amount: 150000,
+          memo: 'Initial Owner Capital Injection',
+          staffName: 'admin'
+        },
+        {
+          id: 'JRN-1001',
+          timestamp: ts1,
+          account: "3010 - Owner's Equity",
+          type: 'Credit',
+          amount: 150000,
+          memo: 'Initial Owner Capital Injection',
+          staffName: 'admin'
+        },
+        {
+          id: 'JRN-1002',
+          timestamp: ts2,
+          account: '1200 - Inventory Asset',
+          type: 'Debit',
+          amount: 43500,
+          memo: 'Stock & Wholesale Component Purchases',
+          staffName: 'admin'
+        },
+        {
+          id: 'JRN-1002',
+          timestamp: ts2,
+          account: '2000 - Accounts Payable',
+          type: 'Credit',
+          amount: 43500,
+          memo: 'Stock & Wholesale Component Purchases',
+          staffName: 'admin'
+        }
+      ];
+    }
+
+    let activeAccountingSubTab = 'overview';
+    let currentStatementType = 'pl';
+
+    function switchAccountingSubTab(viewId, btn) {
+      activeAccountingSubTab = viewId;
+      document.querySelectorAll('.acc-subnav-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('.acc-section').forEach(s => s.classList.remove('active'));
+      const target = document.getElementById('acc-view-' + viewId);
+      if (target) target.classList.add('active');
+      renderAccounting();
+    }
+
+    function postLedgerDoubleEntry(journalId, debitAccount, creditAccount, amount, memo, staff) {
+      const nowStr = getNepalTimestamp();
+      const st = staff || (typeof getActiveUser === 'function' ? getActiveUser() : 'admin');
+      const amt = Math.round(Number(amount) * 100) / 100;
+      if (amt <= 0) return;
+
+      ledgerEntries.unshift({
+        id: journalId,
+        timestamp: nowStr,
+        account: debitAccount,
+        type: 'Debit',
+        amount: amt,
+        memo: memo,
+        staffName: st
+      });
+
+      ledgerEntries.unshift({
+        id: journalId,
+        timestamp: nowStr,
+        account: creditAccount,
+        type: 'Credit',
+        amount: amt,
+        memo: memo,
+        staffName: st
+      });
+    }
+
+    function renderAccounting() {
+      // 1. Core Financial Calculations
+      const totalSalesRevenue = items.reduce((s, i) => s + (Number(i.salesRevenue) || 0), 0);
+      const totalRepairRevenue = repairs.reduce((s, r) => s + (Number(r.repairCost) || 0), 0);
+      const totalRevenue = totalSalesRevenue + totalRepairRevenue;
+
+      // Estimate COGS: Cost of sold inventory items (approx 70% of price) + Cost of spare parts consumed in repairs (Rs. 450 per part)
+      const invCogs = items.reduce((s, i) => s + ((Number(i.soldQuantity) || 0) * (Number(i.unitPrice || 0) * 0.70)), 0);
+      const repairCogs = repairs.reduce((s, r) => s + ((r.partsUsed || []).length * 450), 0);
+      const totalCogs = Math.round((invCogs + repairCogs) * 100) / 100;
+
+      const grossProfit = Math.round((totalRevenue - totalCogs) * 100) / 100;
+      const grossMarginPct = totalRevenue > 0 ? ((grossProfit / totalRevenue) * 100).toFixed(1) : '0.0';
+
+      const totalOpExpenses = expenses.reduce((s, e) => s + (Number(e.amount) || 0), 0) +
+                              payrollRecords.reduce((s, p) => s + (Number(p.netPayable) || 0), 0);
+      const netProfit = Math.round((grossProfit - totalOpExpenses) * 100) / 100;
+      const netMarginPct = totalRevenue > 0 ? ((netProfit / totalRevenue) * 100).toFixed(1) : '0.0';
+
+      // Accounts Receivable (AR): Outstanding balances from repair jobs where balanceDue > 0
+      const totalAr = repairs.reduce((s, r) => {
+        const cost = Number(r.repairCost) || 0;
+        const adv = Number(r.advancePaid) || 0;
+        const fin = Number(r.finalPayment) || 0;
+        return s + Math.max(0, cost - adv - fin);
+      }, 0);
+
+      // Accounts Payable (AP): Outstanding balances from vendor bills
+      const totalAp = vendorBills.reduce((s, v) => {
+        const tot = Number(v.totalAmount) || 0;
+        const pd = Number(v.paidAmount) || 0;
+        return s + Math.max(0, tot - pd);
+      }, 0);
+
+      // Cash & Bank Liquidity: Opening Float (Rs. 150,000) + Cash Sales + Repair Collections - Vendor Cash Settlements - Operating Expenses - Payroll
+      const repairCashCollected = repairs.reduce((s, r) => s + (Number(r.advancePaid) || 0) + (Number(r.finalPayment) || 0), 0);
+      const vendorCashPaid = vendorBills.reduce((s, v) => s + (Number(v.paidAmount) || 0), 0);
+      const estimatedCash = Math.round((150000 + totalSalesRevenue + repairCashCollected - vendorCashPaid - totalOpExpenses) * 100) / 100;
+
+      const inventoryVal = items.reduce((s, i) => s + ((Number(i.quantity) || 0) * (Number(i.unitPrice) || 0)), 0);
+      const workingCapital = Math.round((estimatedCash + totalAr + inventoryVal - totalAp) * 100) / 100;
+      const ownersEquity = workingCapital;
+
+      // 2. Populate KPI Cards
+      const setEl = (id, txt) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = txt;
+      };
+
+      setEl('acc-kpi-revenue', formatCurrency(totalRevenue));
+      setEl('acc-kpi-cogs', formatCurrency(totalCogs));
+      setEl('acc-kpi-gross-profit', formatCurrency(grossProfit));
+      setEl('acc-kpi-gross-margin', `Gross Margin: ${grossMarginPct}%`);
+      setEl('acc-kpi-expenses', formatCurrency(totalOpExpenses));
+      setEl('acc-kpi-net-profit', formatCurrency(netProfit));
+      setEl('acc-kpi-net-margin', `Net Margin: ${netMarginPct}%`);
+      setEl('acc-kpi-ar', formatCurrency(totalAr));
+      setEl('acc-kpi-ap', formatCurrency(totalAp));
+      setEl('acc-kpi-cash', formatCurrency(estimatedCash));
+
+      // Solvency metrics
+      setEl('acc-health-working-capital', formatCurrency(workingCapital));
+      setEl('acc-health-inventory-val', formatCurrency(inventoryVal));
+      setEl('acc-health-ar-total', formatCurrency(totalAr));
+      setEl('acc-health-ap-total', formatCurrency(totalAp));
+      setEl('acc-health-equity', formatCurrency(ownersEquity));
+      setEl('ar-total-badge', `Total Outstanding AR: ${formatCurrency(totalAr)}`);
+      setEl('ap-total-badge', `Total Supplier AP Due: ${formatCurrency(totalAp)}`);
+
+      // 3. Render Active Sub-Views
+      renderLedgerTable();
+      renderArTable();
+      renderApTable();
+      renderExpensesTable();
+      renderPayrollTable();
+      renderFinancialStatements();
+    }
+
+    function renderLedgerTable() {
+      const tbody = document.getElementById('ledger-tbody');
+      if (!tbody) return;
+
+      const search = (document.getElementById('gl-search-input') ? document.getElementById('gl-search-input').value : '').toLowerCase().trim();
+      const acctFilter = document.getElementById('gl-account-filter') ? document.getElementById('gl-account-filter').value : '';
+
+      const filtered = ledgerEntries.filter(entry => {
+        const matchesSearch = !search ||
+          (entry.account || '').toLowerCase().includes(search) ||
+          (entry.memo || '').toLowerCase().includes(search) ||
+          (entry.staffName || '').toLowerCase().includes(search) ||
+          (entry.id || '').toLowerCase().includes(search);
+        const matchesAcct = !acctFilter || entry.account === acctFilter;
+        return matchesSearch && matchesAcct;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:1rem;">No ledger journal entries match the filter.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(e => `
+        <tr>
+          <td><span style="font-size:0.8rem;">${formatTimestampStacked(e.timestamp)}</span></td>
+          <td><code>${e.id}</code></td>
+          <td><strong>${e.account}</strong></td>
+          <td>${e.memo || '-'}</td>
+          <td style="font-weight:700;color:${e.type === 'Debit' ? '#16a34a' : '#64748b'};">${e.type === 'Debit' ? formatCurrency(e.amount) : '-'}</td>
+          <td style="font-weight:700;color:${e.type === 'Credit' ? '#2563eb' : '#64748b'};">${e.type === 'Credit' ? formatCurrency(e.amount) : '-'}</td>
+          <td><span class="badge" style="background:#f1f5f9;color:#334155;">${e.staffName || 'admin'}</span></td>
+        </tr>
+      `).join('');
+    }
+
+    function renderArTable() {
+      const tbody = document.getElementById('ar-tbody');
+      if (!tbody) return;
+
+      const search = (document.getElementById('ar-search-input') ? document.getElementById('ar-search-input').value : '').toLowerCase().trim();
+
+      // Gather repair tickets with positive balanceDue
+      const arList = repairs.map(r => {
+        const total = Number(r.repairCost) || 0;
+        const adv = Number(r.advancePaid) || 0;
+        const fin = Number(r.finalPayment) || 0;
+        const due = Math.max(0, total - adv - fin);
+        return {
+          id: r.id,
+          ticketId: r.ticketId,
+          customerName: r.customerName || 'Walk-in Customer',
+          phone: r.customerPhone || '-',
+          device: `${r.deviceName || 'Device'} (${r.category || 'Repair'})`,
+          totalQuote: total,
+          advancePaid: adv,
+          finalPaid: fin,
+          balanceDue: due,
+          status: r.status || 'Received'
+        };
+      }).filter(item => item.balanceDue > 0);
+
+      const filtered = arList.filter(item => {
+        return !search ||
+          item.customerName.toLowerCase().includes(search) ||
+          item.phone.toLowerCase().includes(search) ||
+          item.ticketId.toLowerCase().includes(search) ||
+          item.device.toLowerCase().includes(search);
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:#16a34a;padding:1.25rem;"><strong>✅ All Accounts Receivable are Clear!</strong> No outstanding customer dues.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(item => `
+        <tr>
+          <td>
+            <strong>${item.customerName}</strong>
+            <div style="font-size:0.75rem;color:var(--muted);">${item.phone}</div>
+          </td>
+          <td><code>${item.ticketId}</code></td>
+          <td>${item.device}</td>
+          <td>${formatCurrency(item.totalQuote)}</td>
+          <td>${formatCurrency(item.advancePaid)}</td>
+          <td>${formatCurrency(item.finalPaid)}</td>
+          <td style="font-weight:800;color:#dc2626;font-size:0.95rem;">${formatCurrency(item.balanceDue)}</td>
+          <td><span class="badge badge-warn">${item.status}</span></td>
+          <td>
+            <button type="button" class="btn btn-primary btn-sm" onclick="openCollectArModal('${item.id}')">Collect Payment</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function renderApTable() {
+      const tbody = document.getElementById('ap-tbody');
+      if (!tbody) return;
+
+      if (vendorBills.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;color:#16a34a;padding:1.25rem;"><strong>✅ No Outstanding Supplier Payables!</strong></td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = vendorBills.map(b => {
+        const total = Number(b.totalAmount) || 0;
+        const paid = Number(b.paidAmount) || 0;
+        const due = Math.max(0, total - paid);
+        const statusBadge = due === 0
+          ? '<span class="badge badge-ok">Paid</span>'
+          : paid > 0
+            ? '<span class="badge badge-warn">Partial Due</span>'
+            : '<span class="badge badge-danger">Unpaid</span>';
+
+        return `
+          <tr>
+            <td><code>${b.id}</code></td>
+            <td><strong>${b.vendorName}</strong></td>
+            <td><code>${b.invoiceNumber}</code></td>
+            <td>
+              <div style="font-size:0.8rem;">Bill: ${b.invoiceDate || '-'}</div>
+              <div style="font-size:0.75rem;color:#dc2626;font-weight:600;">Due: ${b.dueDate || 'Upon Receipt'}</div>
+            </td>
+            <td>${b.description || '-'}</td>
+            <td>${formatCurrency(total)}</td>
+            <td>${formatCurrency(paid)}</td>
+            <td style="font-weight:800;color:${due > 0 ? '#dc2626' : '#16a34a'};">${formatCurrency(due)}</td>
+            <td>${statusBadge}</td>
+            <td><span class="badge" style="background:#f1f5f9;color:#334155;">${b.staffName || 'admin'}</span></td>
+            <td>
+              ${due > 0
+                ? `<button type="button" class="btn btn-outline btn-sm" onclick="openPayVendorModal('${b.id}')">Pay Vendor</button>`
+                : `<span style="color:#16a34a;font-weight:700;">Settled</span>`
+              }
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderExpensesTable() {
+      const tbody = document.getElementById('expenses-tbody');
+      if (!tbody) return;
+
+      const search = (document.getElementById('expense-search-input') ? document.getElementById('expense-search-input').value : '').toLowerCase().trim();
+      const catFilter = document.getElementById('expense-cat-filter') ? document.getElementById('expense-cat-filter').value : '';
+
+      const filtered = expenses.filter(e => {
+        const matchesSearch = !search ||
+          (e.payee || '').toLowerCase().includes(search) ||
+          (e.notes || '').toLowerCase().includes(search) ||
+          (e.staffName || '').toLowerCase().includes(search) ||
+          (e.id || '').toLowerCase().includes(search);
+        const matchesCat = !catFilter || e.category === catFilter;
+        return matchesSearch && matchesCat;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:var(--muted);padding:1rem;">No expense records match the search filter.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(e => `
+        <tr>
+          <td><span style="font-size:0.8rem;">${formatTimestampStacked(e.date)}</span></td>
+          <td><code>${e.id}</code></td>
+          <td><span class="badge badge-info">${e.category}</span></td>
+          <td><strong>${e.payee}</strong></td>
+          <td style="font-weight:700;color:#dc2626;">${formatCurrency(e.amount)}</td>
+          <td>${e.method}</td>
+          <td><span class="badge" style="background:#f1f5f9;color:#334155;">${e.staffName || 'admin'}</span></td>
+          <td style="font-size:0.8rem;color:var(--muted);">${e.notes || '-'}</td>
+          <td>
+            <button type="button" class="btn btn-outline btn-sm" style="color:#dc2626;" onclick="deleteExpense('${e.id}')">Delete</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function renderPayrollTable() {
+      const tbody = document.getElementById('payroll-tbody');
+      if (!tbody) return;
+
+      if (payrollRecords.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;color:var(--muted);padding:1rem;">No payroll disbursement records logged yet.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = payrollRecords.map(p => `
+        <tr>
+          <td><code>${p.id}</code></td>
+          <td><strong>${p.staffName}</strong> <span style="font-size:0.75rem;color:var(--muted);">(@${p.staffUser})</span></td>
+          <td><strong>${p.period}</strong></td>
+          <td>${formatCurrency(p.baseSalary)}</td>
+          <td style="color:#16a34a;">+${formatCurrency(p.bonus)}</td>
+          <td style="color:#dc2626;">-${formatCurrency(p.deductions)}</td>
+          <td style="font-weight:800;color:#1e40af;font-size:0.95rem;">${formatCurrency(p.netPayable)}</td>
+          <td><span style="font-size:0.8rem;">${formatTimestampStacked(p.disbursedAt)}</span></td>
+          <td>${p.method}</td>
+          <td><span class="badge" style="background:#f1f5f9;color:#334155;">${p.processedBy || 'admin'}</span></td>
+        </tr>
+      `).join('');
+    }
+
+    function switchStatementType(type) {
+      currentStatementType = type;
+      ['pl', 'bs', 'cf', 'tax'].forEach(t => {
+        const btn = document.getElementById('stmt-tab-btn-' + t);
+        if (btn) btn.classList.toggle('active', t === type);
+      });
+      renderFinancialStatements();
+    }
+
+    function renderFinancialStatements() {
+      const container = document.getElementById('financial-statement-container');
+      if (!container) return;
+
+      const totalSalesRevenue = items.reduce((s, i) => s + (Number(i.salesRevenue) || 0), 0);
+      const totalRepairRevenue = repairs.reduce((s, r) => s + (Number(r.repairCost) || 0), 0);
+      const totalRevenue = totalSalesRevenue + totalRepairRevenue;
+
+      const invCogs = items.reduce((s, i) => s + ((Number(i.soldQuantity) || 0) * (Number(i.unitPrice || 0) * 0.70)), 0);
+      const repairCogs = repairs.reduce((s, r) => s + ((r.partsUsed || []).length * 450), 0);
+      const totalCogs = Math.round((invCogs + repairCogs) * 100) / 100;
+      const grossProfit = Math.round((totalRevenue - totalCogs) * 100) / 100;
+
+      // Group expenses by category
+      const expenseByCategory = {};
+      expenses.forEach(e => {
+        expenseByCategory[e.category] = (expenseByCategory[e.category] || 0) + (Number(e.amount) || 0);
+      });
+      const payrollTotal = payrollRecords.reduce((s, p) => s + (Number(p.netPayable) || 0), 0);
+      if (payrollTotal > 0) {
+        expenseByCategory['Technician Salaries & Wages'] = (expenseByCategory['Technician Salaries & Wages'] || 0) + payrollTotal;
+      }
+
+      const totalOpExpenses = Object.values(expenseByCategory).reduce((s, a) => s + a, 0);
+      const netProfit = Math.round((grossProfit - totalOpExpenses) * 100) / 100;
+
+      const totalAr = repairs.reduce((s, r) => {
+        return s + Math.max(0, (Number(r.repairCost) || 0) - (Number(r.advancePaid) || 0) - (Number(r.finalPayment) || 0));
+      }, 0);
+
+      const totalAp = vendorBills.reduce((s, v) => {
+        return s + Math.max(0, (Number(v.totalAmount) || 0) - (Number(v.paidAmount) || 0));
+      }, 0);
+
+      const customerAdvances = repairs.reduce((s, r) => {
+        const cost = Number(r.repairCost) || 0;
+        const adv = Number(r.advancePaid) || 0;
+        const fin = Number(r.finalPayment) || 0;
+        // If repair is in progress and advance exceeds cost or final payment not settled
+        return r.status !== 'Delivered' ? s + adv : s;
+      }, 0);
+
+      const repairCashCollected = repairs.reduce((s, r) => s + (Number(r.advancePaid) || 0) + (Number(r.finalPayment) || 0), 0);
+      const vendorCashPaid = vendorBills.reduce((s, v) => s + (Number(v.paidAmount) || 0), 0);
+      const estimatedCash = Math.round((150000 + totalSalesRevenue + repairCashCollected - vendorCashPaid - totalOpExpenses) * 100) / 100;
+      const inventoryVal = items.reduce((s, i) => s + ((Number(i.quantity) || 0) * (Number(i.unitPrice) || 0)), 0);
+      const totalAssets = Math.round((estimatedCash + totalAr + inventoryVal) * 100) / 100;
+      const totalLiabilities = Math.round((totalAp + customerAdvances) * 100) / 100;
+      const ownersEquity = Math.round((totalAssets - totalLiabilities) * 100) / 100;
+
+      const nepalNow = getNepalTimestamp(new Date(), true);
+
+      if (currentStatementType === 'pl') {
+        container.innerHTML = `
+          <div class="fin-header-block">
+            <h2>MOHARAIN ELECTRONICS MARMAT CENTER</h2>
+            <p>Dhangadhi, Hasanpur-5, Kailali, Nepal | PAN: 601928374</p>
+            <h3>STATEMENT OF PROFIT &amp; LOSS (INCOME STATEMENT)</h3>
+            <p>Reporting Period: All Transactions to Date &bull; As of ${nepalNow} (Nepal Time)</p>
+          </div>
+          <table class="fin-table">
+            <thead>
+              <tr>
+                <th>Account &amp; Financial Particulars</th>
+                <th style="text-align:right;">Sub-Total (Rs.)</th>
+                <th style="text-align:right;">Total Amount (Rs.)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="fin-row-cat"><td colspan="3">1. OPERATING REVENUE (TURNOVER)</td></tr>
+              <tr class="fin-row-item"><td>Retail Hardware &amp; Component Sales</td><td style="text-align:right;">${formatCurrency(totalSalesRevenue)}</td><td></td></tr>
+              <tr class="fin-row-item"><td>Electronics Repair &amp; Diagnostic Services</td><td style="text-align:right;">${formatCurrency(totalRepairRevenue)}</td><td></td></tr>
+              <tr class="fin-row-subtotal"><td><strong>TOTAL OPERATING REVENUE</strong></td><td></td><td style="text-align:right;font-weight:700;color:#1e40af;">${formatCurrency(totalRevenue)}</td></tr>
+
+              <tr class="fin-row-cat"><td colspan="3">2. COST OF GOODS SOLD (COGS)</td></tr>
+              <tr class="fin-row-item"><td>Wholesale Inventory Parts Sold</td><td style="text-align:right;">${formatCurrency(invCogs)}</td><td></td></tr>
+              <tr class="fin-row-item"><td>Replacement Components Consumed in Repairs</td><td style="text-align:right;">${formatCurrency(repairCogs)}</td><td></td></tr>
+              <tr class="fin-row-subtotal"><td><strong>TOTAL COST OF GOODS SOLD</strong></td><td></td><td style="text-align:right;font-weight:700;color:#d97706;">(${formatCurrency(totalCogs)})</td></tr>
+
+              <tr style="background:#f8fafc;font-weight:800;font-size:0.95rem;">
+                <td>GROSS PROFIT (Revenue - COGS)</td>
+                <td></td>
+                <td style="text-align:right;color:#166534;">${formatCurrency(grossProfit)}</td>
+              </tr>
+
+              <tr class="fin-row-cat"><td colspan="3">3. WORKSHOP OPERATING EXPENSES</td></tr>
+              ${Object.keys(expenseByCategory).map(cat => `
+                <tr class="fin-row-item">
+                  <td>${cat}</td>
+                  <td style="text-align:right;">${formatCurrency(expenseByCategory[cat])}</td>
+                  <td></td>
+                </tr>
+              `).join('')}
+              <tr class="fin-row-subtotal"><td><strong>TOTAL OPERATING EXPENSES</strong></td><td></td><td style="text-align:right;font-weight:700;color:#dc2626;">(${formatCurrency(totalOpExpenses)})</td></tr>
+
+              <tr class="fin-row-net ${netProfit < 0 ? 'net-loss' : ''}">
+                <td>NET OPERATING PROFIT / (LOSS)</td>
+                <td></td>
+                <td style="text-align:right;">${formatCurrency(netProfit)}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="margin-top:1.5rem;display:flex;justify-content:space-between;padding-top:1rem;border-top:1px solid #cbd5e1;font-size:0.82rem;color:var(--muted);">
+            <div>Prepared By: <strong>Moharain Automated Ledger Engine</strong></div>
+            <div>Approved by: <strong>Shop Management / Administrator</strong></div>
+          </div>
+        `;
+      } else if (currentStatementType === 'bs') {
+        container.innerHTML = `
+          <div class="fin-header-block">
+            <h2>MOHARAIN ELECTRONICS MARMAT CENTER</h2>
+            <p>Dhangadhi, Hasanpur-5, Kailali, Nepal | PAN: 601928374</p>
+            <h3>BALANCE SHEET (STATEMENT OF FINANCIAL POSITION)</h3>
+            <p>As of ${nepalNow} (Nepal Time, Asia/Kathmandu)</p>
+          </div>
+          <table class="fin-table">
+            <thead>
+              <tr>
+                <th>Assets, Liabilities &amp; Equity</th>
+                <th style="text-align:right;">Schedule (Rs.)</th>
+                <th style="text-align:right;">Total Valuation (Rs.)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="fin-row-cat"><td colspan="3">1. CURRENT ASSETS</td></tr>
+              <tr class="fin-row-item"><td>Cash on Hand &amp; Bank Balances (1010/1020)</td><td style="text-align:right;">${formatCurrency(estimatedCash)}</td><td></td></tr>
+              <tr class="fin-row-item"><td>Accounts Receivable &mdash; Customer Dues (1100)</td><td style="text-align:right;">${formatCurrency(totalAr)}</td><td></td></tr>
+              <tr class="fin-row-item"><td>Inventory Asset &mdash; Electronics Stock at Cost (1200)</td><td style="text-align:right;">${formatCurrency(inventoryVal)}</td><td></td></tr>
+              <tr class="fin-row-subtotal"><td><strong>TOTAL CURRENT ASSETS</strong></td><td></td><td style="text-align:right;font-weight:800;color:#1e40af;font-size:0.95rem;">${formatCurrency(totalAssets)}</td></tr>
+
+              <tr class="fin-row-cat"><td colspan="3">2. CURRENT LIABILITIES</td></tr>
+              <tr class="fin-row-item"><td>Accounts Payable &mdash; Vendor Invoices (2000)</td><td style="text-align:right;">${formatCurrency(totalAp)}</td><td></td></tr>
+              <tr class="fin-row-item"><td>Customer Advance Deposits for Repairs (2100)</td><td style="text-align:right;">${formatCurrency(customerAdvances)}</td><td></td></tr>
+              <tr class="fin-row-subtotal"><td><strong>TOTAL CURRENT LIABILITIES</strong></td><td></td><td style="text-align:right;font-weight:800;color:#dc2626;font-size:0.95rem;">${formatCurrency(totalLiabilities)}</td></tr>
+
+              <tr class="fin-row-cat"><td colspan="3">3. OWNER'S EQUITY &amp; WORKING CAPITAL</td></tr>
+              <tr class="fin-row-item"><td>Initial Capital Injection &amp; Retained Earnings (3010)</td><td style="text-align:right;">${formatCurrency(ownersEquity)}</td><td></td></tr>
+              <tr class="fin-row-subtotal"><td><strong>TOTAL OWNER'S EQUITY</strong></td><td></td><td style="text-align:right;font-weight:800;color:#16a34a;font-size:0.95rem;">${formatCurrency(ownersEquity)}</td></tr>
+
+              <tr class="fin-row-net">
+                <td>TOTAL LIABILITIES &amp; OWNER'S EQUITY (Balance Check)</td>
+                <td></td>
+                <td style="text-align:right;">${formatCurrency(totalLiabilities + ownersEquity)}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="margin-top:1.5rem;padding:0.75rem;background:#f0fdf4;border-radius:6px;border:1px solid #bbf7d0;font-size:0.84rem;color:#166534;text-align:center;">
+            <strong>Accounting Equation Verified:</strong> Assets (${formatCurrency(totalAssets)}) = Liabilities (${formatCurrency(totalLiabilities)}) + Equity (${formatCurrency(ownersEquity)})
+          </div>
+        `;
+      } else if (currentStatementType === 'cf') {
+        const netCashFlow = (totalSalesRevenue + repairCashCollected) - (vendorCashPaid + totalOpExpenses);
+        container.innerHTML = `
+          <div class="fin-header-block">
+            <h2>MOHARAIN ELECTRONICS MARMAT CENTER</h2>
+            <p>Dhangadhi, Hasanpur-5, Kailali, Nepal | PAN: 601928374</p>
+            <h3>STATEMENT OF CASH FLOWS</h3>
+            <p>Operating Cash Inflows &amp; Outflows &bull; As of ${nepalNow}</p>
+          </div>
+          <table class="fin-table">
+            <thead>
+              <tr>
+                <th>Cash Flow Particulars</th>
+                <th style="text-align:right;">Inflow / Outflow (Rs.)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="fin-row-cat"><td colspan="2">CASH INFLOWS FROM WORKSHOP OPERATIONS</td></tr>
+              <tr class="fin-row-item"><td>Cash Receipts from Retail Point-of-Sale Counter</td><td style="text-align:right;color:#16a34a;font-weight:700;">+${formatCurrency(totalSalesRevenue)}</td></tr>
+              <tr class="fin-row-item"><td>Cash Collections from Repairs &amp; Customer Due Settlements</td><td style="text-align:right;color:#16a34a;font-weight:700;">+${formatCurrency(repairCashCollected)}</td></tr>
+              <tr class="fin-row-subtotal"><td><strong>TOTAL CASH INFLOWS</strong></td><td style="text-align:right;color:#16a34a;font-weight:800;">+${formatCurrency(totalSalesRevenue + repairCashCollected)}</td></tr>
+
+              <tr class="fin-row-cat"><td colspan="2">CASH OUTFLOWS FOR WORKSHOP OPERATIONS</td></tr>
+              <tr class="fin-row-item"><td>Supplier Invoices &amp; Spare Parts Cash Payments</td><td style="text-align:right;color:#dc2626;font-weight:700;">-${formatCurrency(vendorCashPaid)}</td></tr>
+              <tr class="fin-row-item"><td>Operating Expenses (Rent, NEA Electricity, Tools, Food, Internet)</td><td style="text-align:right;color:#dc2626;font-weight:700;">-${formatCurrency(totalOpExpenses)}</td></tr>
+              <tr class="fin-row-subtotal"><td><strong>TOTAL CASH OUTFLOWS</strong></td><td style="text-align:right;color:#dc2626;font-weight:800;">-${formatCurrency(vendorCashPaid + totalOpExpenses)}</td></tr>
+
+              <tr class="fin-row-net ${netCashFlow < 0 ? 'net-loss' : ''}">
+                <td>NET OPERATING CASH FLOW</td>
+                <td style="text-align:right;">${formatCurrency(netCashFlow)}</td>
+              </tr>
+              <tr style="background:#f8fafc;font-weight:700;">
+                <td>OPENING CASH FLOAT &amp; BANK BALANCE</td>
+                <td style="text-align:right;">${formatCurrency(150000)}</td>
+              </tr>
+              <tr style="background:#f1f5f9;font-weight:800;font-size:1.05rem;">
+                <td>CLOSING CASH &amp; BANK BALANCE</td>
+                <td style="text-align:right;color:#1e40af;">${formatCurrency(estimatedCash)}</td>
+              </tr>
+            </tbody>
+          </table>
+        `;
+      } else if (currentStatementType === 'tax') {
+        const taxableSales = totalSalesRevenue;
+        const vatOutput = Math.round((taxableSales * 0.13) * 100) / 100;
+        const taxablePurchases = vendorCashPaid;
+        const vatInput = Math.round((taxablePurchases * 0.13) * 100) / 100;
+        const netVatPayable = Math.max(0, vatOutput - vatInput);
+
+        container.innerHTML = `
+          <div class="fin-header-block">
+            <h2>MOHARAIN ELECTRONICS MARMAT CENTER</h2>
+            <p>Dhangadhi, Hasanpur-5, Kailali, Nepal | Inland Revenue Department (IRD) Compliance</p>
+            <h3>NEPAL VALUE ADDED TAX (VAT 13%) &amp; PAN REPORT</h3>
+            <p>Tax Assessment Summary &bull; As of ${nepalNow}</p>
+          </div>
+          <table class="fin-table">
+            <thead>
+              <tr>
+                <th>Tax Category / IRD Parameter</th>
+                <th style="text-align:right;">Base Turnover (Rs.)</th>
+                <th style="text-align:right;">VAT @ 13% (Rs.)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="fin-row-cat"><td colspan="3">1. TAXABLE SALES &amp; OUTPUT VAT</td></tr>
+              <tr class="fin-row-item"><td>Counter Sales &amp; Hardware Products</td><td style="text-align:right;">${formatCurrency(taxableSales)}</td><td style="text-align:right;color:#1e40af;font-weight:700;">${formatCurrency(vatOutput)}</td></tr>
+              <tr class="fin-row-item"><td>Exempt / Repair Labour Services</td><td style="text-align:right;">${formatCurrency(totalRepairRevenue)}</td><td style="text-align:right;">Rs. 0.00 (Exempt)</td></tr>
+              <tr class="fin-row-subtotal"><td><strong>TOTAL OUTPUT VAT COLLECTIBLE</strong></td><td></td><td style="text-align:right;font-weight:800;color:#1e40af;">${formatCurrency(vatOutput)}</td></tr>
+
+              <tr class="fin-row-cat"><td colspan="3">2. TAXABLE PURCHASES &amp; INPUT VAT CREDIT</td></tr>
+              <tr class="fin-row-item"><td>Wholesale Spare Parts &amp; Equipment Invoices</td><td style="text-align:right;">${formatCurrency(taxablePurchases)}</td><td style="text-align:right;color:#16a34a;font-weight:700;">${formatCurrency(vatInput)}</td></tr>
+              <tr class="fin-row-subtotal"><td><strong>TOTAL INPUT VAT CREDIT ELIGIBLE</strong></td><td></td><td style="text-align:right;font-weight:800;color:#16a34a;">${formatCurrency(vatInput)}</td></tr>
+
+              <tr class="fin-row-net">
+                <td>ESTIMATED NET VAT PAYABLE TO IRD NEPAL</td>
+                <td></td>
+                <td style="text-align:right;">${formatCurrency(netVatPayable)}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="margin-top:1.5rem;padding:0.75rem;background:#f8fafc;border-radius:6px;border:1px solid #e2e8f0;font-size:0.8rem;color:#475569;">
+            📌 <em>Applicable standard rate: 13% VAT as per Government of Nepal Inland Revenue Department. Repair labor charges recorded under standard threshold exemption or separate PAN invoices.</em>
+          </div>
+        `;
+      }
+    }
+
+    /* Modal Handlers for Expenses */
+    function openAddExpenseModal() {
+      document.getElementById('add-expense-form').reset();
+      document.getElementById('add-expense-overlay').classList.add('open');
+    }
+    function closeAddExpenseModal() {
+      document.getElementById('add-expense-overlay').classList.remove('open');
+    }
+    function saveExpense(e) {
+      e.preventDefault();
+      const cat = document.getElementById('exp-category').value;
+      const payee = document.getElementById('exp-payee').value.trim();
+      const amount = parseFloat(document.getElementById('exp-amount').value) || 0;
+      const method = document.getElementById('exp-method').value;
+      const ref = (document.getElementById('exp-ref').value || '').trim();
+      const notes = (document.getElementById('exp-notes').value || '').trim();
+      const staff = (typeof getActiveUser === 'function' ? getActiveUser() : '') || 'admin';
+      const nowStr = getNepalTimestamp();
+
+      const newExp = {
+        id: 'EXP-' + (1001 + expenses.length),
+        date: nowStr,
+        category: cat,
+        payee: payee,
+        amount: amount,
+        method: method,
+        refNo: ref,
+        notes: notes,
+        staffName: staff
+      };
+
+      expenses.unshift(newExp);
+
+      // Post double-entry to General Ledger
+      const debitAccount = cat === 'Rent' ? '6010 - Shop Rent Expense'
+        : cat === 'Electricity & Utilities' ? '6020 - Electricity & Utilities'
+        : cat === 'Technician Salaries & Wages' ? '6030 - Technician Salaries'
+        : cat === 'Workshop Tools & Consumables' ? '6040 - Workshop Tools & Supplies'
+        : '6090 - Miscellaneous Expenses';
+
+      const creditAccount = method === 'Cash' ? '1010 - Cash on Hand' : '1020 - Bank / Digital Wallet';
+      postLedgerDoubleEntry(newExp.id, debitAccount, creditAccount, amount, `Expense: ${cat} paid to ${payee}`, staff);
+
+      saveState();
+      closeAddExpenseModal();
+      showToast(`Recorded expense ${newExp.id} of ${formatCurrency(amount)}.`);
+    }
+
+    function deleteExpense(id) {
+      if (!confirm(`Are you sure you want to remove expense ${id}?`)) return;
+      expenses = expenses.filter(e => e.id !== id);
+      saveState();
+      showToast(`Removed expense ${id}.`);
+    }
+
+    /* Modal Handlers for Vendor Bills (AP) */
+    function openAddVendorBillModal() {
+      document.getElementById('add-vendor-bill-form').reset();
+      document.getElementById('vap-paid').value = '0';
+      document.getElementById('vap-balance-preview').value = 'Rs. 0.00';
+      document.getElementById('add-vendor-bill-overlay').classList.add('open');
+    }
+    function closeAddVendorBillModal() {
+      document.getElementById('add-vendor-bill-overlay').classList.remove('open');
+    }
+    function updateVapBalancePreview() {
+      const tot = parseFloat(document.getElementById('vap-total').value) || 0;
+      const pd = parseFloat(document.getElementById('vap-paid').value) || 0;
+      const due = Math.max(0, tot - pd);
+      document.getElementById('vap-balance-preview').value = formatCurrency(due);
+    }
+    function saveVendorBill(e) {
+      e.preventDefault();
+      const vendor = document.getElementById('vap-vendor').value.trim();
+      const invNum = document.getElementById('vap-inv-num').value.trim();
+      const total = parseFloat(document.getElementById('vap-total').value) || 0;
+      const paid = parseFloat(document.getElementById('vap-paid').value) || 0;
+      const dueDate = document.getElementById('vap-due-date').value || '';
+      const desc = (document.getElementById('vap-desc').value || '').trim();
+      const staff = (typeof getActiveUser === 'function' ? getActiveUser() : '') || 'admin';
+      const nowStr = getNepalTimestamp();
+      const due = Math.max(0, total - paid);
+
+      const newBill = {
+        id: 'VAP-' + (1001 + vendorBills.length),
+        vendorName: vendor,
+        invoiceNumber: invNum,
+        invoiceDate: nowStr.split(' ')[0],
+        dueDate: dueDate || 'Net 15 Days',
+        description: desc,
+        totalAmount: total,
+        paidAmount: paid,
+        balanceDue: due,
+        status: due === 0 ? 'Paid' : (paid > 0 ? 'Partial' : 'Unpaid'),
+        staffName: staff
+      };
+
+      vendorBills.unshift(newBill);
+
+      // Post double-entry to General Ledger:
+      // Debit Inventory Asset, Credit Accounts Payable for total
+      postLedgerDoubleEntry(newBill.id, '1200 - Inventory Asset', '2000 - Accounts Payable', total, `Vendor Invoice ${invNum} from ${vendor}`, staff);
+      if (paid > 0) {
+        // Debit Accounts Payable, Credit Cash on Hand for upfront payment
+        postLedgerDoubleEntry(newBill.id + '-PAY', '2000 - Accounts Payable', '1010 - Cash on Hand', paid, `Upfront payment for ${invNum}`, staff);
+      }
+
+      saveState();
+      closeAddVendorBillModal();
+      showToast(`Saved vendor invoice ${newBill.id} from ${vendor}.`);
+    }
+
+    function openPayVendorModal(id) {
+      const bill = vendorBills.find(b => b.id === id);
+      if (!bill) return;
+      document.getElementById('pay-v-id').value = bill.id;
+      document.getElementById('pay-v-vendor').textContent = bill.vendorName;
+      document.getElementById('pay-v-inv').textContent = bill.invoiceNumber;
+      const due = Math.max(0, bill.totalAmount - bill.paidAmount);
+      document.getElementById('pay-v-due').textContent = formatCurrency(due);
+      document.getElementById('pay-v-amount').value = due.toFixed(2);
+      document.getElementById('pay-vendor-overlay').classList.add('open');
+    }
+    function closePayVendorModal() {
+      document.getElementById('pay-vendor-overlay').classList.remove('open');
+    }
+    function confirmPayVendor(e) {
+      e.preventDefault();
+      const id = document.getElementById('pay-v-id').value;
+      const bill = vendorBills.find(b => b.id === id);
+      if (!bill) return;
+
+      const amt = parseFloat(document.getElementById('pay-v-amount').value) || 0;
+      const method = document.getElementById('pay-v-method').value;
+      const ref = document.getElementById('pay-v-ref').value.trim();
+      const staff = (typeof getActiveUser === 'function' ? getActiveUser() : '') || 'admin';
+
+      bill.paidAmount = Math.round(((bill.paidAmount || 0) + amt) * 100) / 100;
+      bill.balanceDue = Math.max(0, bill.totalAmount - bill.paidAmount);
+      bill.status = bill.balanceDue === 0 ? 'Paid' : 'Partial';
+
+      const creditAcct = method === 'Cash' ? '1010 - Cash on Hand' : '1020 - Bank / Digital Wallet';
+      postLedgerDoubleEntry('VPM-' + Date.now().toString().slice(-4), '2000 - Accounts Payable', creditAcct, amt, `Supplier settlement for ${bill.invoiceNumber} (${ref || method})`, staff);
+
+      saveState();
+      closePayVendorModal();
+      showToast(`Recorded payment of ${formatCurrency(amt)} to ${bill.vendorName}.`);
+    }
+
+    /* Modal Handlers for Accounts Receivable (AR) */
+    function openCollectArModal(repairId) {
+      const job = repairs.find(r => r.id === repairId);
+      if (!job) return;
+      const total = Number(job.repairCost) || 0;
+      const adv = Number(job.advancePaid) || 0;
+      const fin = Number(job.finalPayment) || 0;
+      const due = Math.max(0, total - adv - fin);
+
+      document.getElementById('col-ar-repair-id').value = job.id;
+      document.getElementById('col-ar-customer').textContent = job.customerName;
+      document.getElementById('col-ar-phone').textContent = job.customerPhone || '-';
+      document.getElementById('col-ar-ticket').textContent = job.ticketId;
+      document.getElementById('col-ar-due').textContent = formatCurrency(due);
+      document.getElementById('col-ar-amount').value = due.toFixed(2);
+      document.getElementById('collect-ar-overlay').classList.add('open');
+    }
+    function closeCollectArModal() {
+      document.getElementById('collect-ar-overlay').classList.remove('open');
+    }
+    function confirmCollectAr(e) {
+      e.preventDefault();
+      const repairId = document.getElementById('col-ar-repair-id').value;
+      const job = repairs.find(r => r.id === repairId);
+      if (!job) return;
+
+      const amt = parseFloat(document.getElementById('col-ar-amount').value) || 0;
+      const method = document.getElementById('col-ar-method').value;
+      const ref = document.getElementById('col-ar-ref').value.trim();
+      const staff = (typeof getActiveUser === 'function' ? getActiveUser() : '') || 'admin';
+
+      job.finalPayment = Math.round(((job.finalPayment || 0) + amt) * 100) / 100;
+      const remDue = Math.max(0, (job.repairCost || 0) - (job.advancePaid || 0) - job.finalPayment);
+      if (remDue === 0 && job.status === 'Ready for Pickup') {
+        job.status = 'Delivered';
+      }
+
+      const debitAcct = method === 'Cash' ? '1010 - Cash on Hand' : '1020 - Bank / Digital Wallet';
+      postLedgerDoubleEntry('ARC-' + Date.now().toString().slice(-4), debitAcct, '1100 - Accounts Receivable', amt, `Collected AR from ${job.customerName} for ticket ${job.ticketId} (${ref || method})`, staff);
+
+      saveState();
+      closeCollectArModal();
+      showToast(`Successfully collected ${formatCurrency(amt)} from ${job.customerName}!`);
+    }
+
+    /* Modal Handlers for Manual Journal Entry */
+    function openManualJournalModal() {
+      document.getElementById('manual-journal-form').reset();
+      document.getElementById('manual-journal-overlay').classList.add('open');
+    }
+    function closeManualJournalModal() {
+      document.getElementById('manual-journal-overlay').classList.remove('open');
+    }
+    function saveManualJournal(e) {
+      e.preventDefault();
+      const debit = document.getElementById('mj-debit').value;
+      const credit = document.getElementById('mj-credit').value;
+      const amount = parseFloat(document.getElementById('mj-amount').value) || 0;
+      const memo = document.getElementById('mj-memo').value.trim();
+      const staff = (typeof getActiveUser === 'function' ? getActiveUser() : '') || 'admin';
+
+      if (debit === credit) {
+        showToast('Debit and Credit accounts must be distinct!');
+        return;
+      }
+
+      const jId = 'JRN-' + (1001 + Math.floor(ledgerEntries.length / 2));
+      postLedgerDoubleEntry(jId, debit, credit, amount, memo, staff);
+
+      saveState();
+      closeManualJournalModal();
+      showToast(`Posted Journal Entry ${jId} for ${formatCurrency(amount)}.`);
+    }
+
+    /* Modal Handlers for Payroll */
+    function openDisbursePayrollModal() {
+      const select = document.getElementById('pay-staff-select');
+      select.innerHTML = '';
+      const users = getUsersList();
+      users.forEach(u => {
+        const opt = document.createElement('option');
+        opt.value = u.username;
+        opt.textContent = `${u.fullName} (@${u.username}) - [${u.role.toUpperCase()}]`;
+        select.appendChild(opt);
+      });
+
+      document.getElementById('pay-period').value = 'Ashwin 2083 (Oct 2026)';
+      document.getElementById('pay-base').value = '20000';
+      document.getElementById('pay-bonus').value = '0';
+      document.getElementById('pay-deductions').value = '0';
+      updatePayrollNetPreview();
+      document.getElementById('disburse-payroll-overlay').classList.add('open');
+    }
+    function closeDisbursePayrollModal() {
+      document.getElementById('disburse-payroll-overlay').classList.remove('open');
+    }
+    function updatePayrollNetPreview() {
+      const base = parseFloat(document.getElementById('pay-base').value) || 0;
+      const bonus = parseFloat(document.getElementById('pay-bonus').value) || 0;
+      const ded = parseFloat(document.getElementById('pay-deductions').value) || 0;
+      const net = Math.max(0, base + bonus - ded);
+      document.getElementById('pay-net-preview').value = formatCurrency(net);
+    }
+    function confirmDisbursePayroll(e) {
+      e.preventDefault();
+      const staffUser = document.getElementById('pay-staff-select').value;
+      const users = getUsersList();
+      const uObj = users.find(u => u.username === staffUser);
+      const staffName = uObj ? uObj.fullName : staffUser;
+
+      const period = document.getElementById('pay-period').value.trim();
+      const base = parseFloat(document.getElementById('pay-base').value) || 0;
+      const bonus = parseFloat(document.getElementById('pay-bonus').value) || 0;
+      const ded = parseFloat(document.getElementById('pay-deductions').value) || 0;
+      const net = Math.max(0, base + bonus - ded);
+      const method = document.getElementById('pay-method').value;
+      const notes = (document.getElementById('pay-notes').value || '').trim();
+      const adminStaff = (typeof getActiveUser === 'function' ? getActiveUser() : '') || 'admin';
+      const nowStr = getNepalTimestamp();
+
+      const newPay = {
+        id: 'PAY-' + (1001 + payrollRecords.length),
+        staffUser: staffUser,
+        staffName: staffName,
+        period: period,
+        baseSalary: base,
+        bonus: bonus,
+        deductions: ded,
+        netPayable: net,
+        disbursedAt: nowStr,
+        method: method,
+        notes: notes,
+        processedBy: adminStaff
+      };
+
+      payrollRecords.unshift(newPay);
+
+      // Post to General Ledger: Debit Technician Salaries, Credit Cash/Bank
+      const creditAcct = method === 'Cash' ? '1010 - Cash on Hand' : '1020 - Bank / Digital Wallet';
+      postLedgerDoubleEntry(newPay.id, '6030 - Technician Salaries', creditAcct, net, `Salary disbursement to ${staffName} for ${period}`, adminStaff);
+
+      saveState();
+      closeDisbursePayrollModal();
+      showToast(`Disbursed salary of ${formatCurrency(net)} to ${staffName}!`);
+    }
+
+    /* CSV Exports */
+    function exportLedgerCsv() {
+      const headers = ['Timestamp', 'Journal ID', 'Account', 'Memo/Reference', 'Debit (Rs.)', 'Credit (Rs.)', 'Staff'];
+      const rows = ledgerEntries.map(e => [
+        `"${e.timestamp || ''}"`,
+        e.id,
+        `"${(e.account || '').replace(/"/g, '""')}"`,
+        `"${(e.memo || '').replace(/"/g, '""')}"`,
+        e.type === 'Debit' ? e.amount.toFixed(2) : '0.00',
+        e.type === 'Credit' ? e.amount.toFixed(2) : '0.00',
+        e.staffName || 'admin'
+      ]);
+      const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'general-ledger-journal.csv';
+      a.click();
+      showToast('Exported General Ledger (.CSV).');
+    }
+
+    function exportExpensesCsv() {
+      const headers = ['Date', 'Expense ID', 'Category', 'Payee', 'Amount (Rs.)', 'Method', 'Ref No', 'Notes', 'Staff'];
+      const rows = expenses.map(e => [
+        `"${e.date || ''}"`,
+        e.id,
+        `"${e.category}"`,
+        `"${(e.payee || '').replace(/"/g, '""')}"`,
+        (e.amount || 0).toFixed(2),
+        `"${e.method}"`,
+        `"${e.refNo || ''}"`,
+        `"${(e.notes || '').replace(/"/g, '""')}"`,
+        e.staffName || 'admin'
+      ]);
+      const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'operating-expenses.csv';
+      a.click();
+      showToast('Exported operating expenses (.CSV).');
+    }
+
     function renderAll() {
       renderKpis();
       renderCatalog();
@@ -4707,6 +6724,7 @@
       renderReports();
       renderAdminHistoryTable();
       renderSecuritySettingsUI();
+      renderAccounting();
     }
 
     normalizeSequentialIds();

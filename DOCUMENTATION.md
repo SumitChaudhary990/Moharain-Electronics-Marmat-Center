@@ -254,3 +254,140 @@ To update an existing installation without losing recorded inventory, repair job
 | **Installer Engine** | Inno Setup 6.7.3 (Lzma2 solid compression) |
 | **Time Format** | ISO 8601 with Nepal Time Offset (`UTC+05:45`), Date stacked over Time |
 | **Currency Rendering** | Nepalese Rupee (`Rs. #,##0.00`) |
+
+---
+
+## 6. Accounting Software Architecture & Financial Ledger
+
+The software incorporates an enterprise-grade **6-Layer Accounting Architecture** engineered specifically for electronics retail and repair workshops, adhering to **Generally Accepted Accounting Principles (GAAP)**, **International Financial Reporting Standards (IFRS)**, and **Nepal Accounting Standards (NAS)**.
+
+### 6.1 Enterprise 6-Layer Architectural Hierarchy
+
+```mermaid
+flowchart TD
+    subgraph L1["Layer 1: Presentation Layer (Frontend)"]
+        UI["Web / Desktop Standalone UI (HTML5 / ES6+ / Edge WebView2)"]
+        DASH["Financial Overview & KPIs Dashboard"]
+        ENTRY["Transaction Entry (POS Bills, Repair Tickets, Expenses, AP)"]
+        REP["Reporting (P&L, Balance Sheet, Cash Flow, Nepal VAT)"]
+        UM["User Management & Role-Based Access Control"]
+        UI --> DASH & ENTRY & REP & UM
+    end
+
+    subgraph L2["Layer 2: Application Layer (Backend & Core Services)"]
+        GL["General Ledger (Central Double-Entry Journal)"]
+        AP["Accounts Payable (Vendor Invoices & Aging)"]
+        AR["Accounts Receivable (Customer Credit & Collections)"]
+        PAY["Payroll (Technician Salaries & Deductions)"]
+        INV["Inventory Management (Stock, SKUs & COGS)"]
+        TAX["Tax & Compliance (Nepal 13% VAT & PAN Invoicing)"]
+        API["REST / WSGI API Layer"]
+        API --> GL & AP & AR & PAY & INV & TAX
+    end
+
+    subgraph L3["Layer 3: Data Layer (Persistence & Storage)"]
+        SQL["Relational Database Engine (Structured Records)"]
+        NOSQL["Document Store & Audit Event Logs"]
+        STORAGE["Persistent Storage Engine (localStorage + JSON)"]
+        DW["Data Warehouse & Historical BI Analytics"]
+        MQ["Event Dispatcher & Message Queues"]
+    end
+
+    subgraph L4["Layer 4: Integration Layer (External Ecosystem)"]
+        BANK["Banking & Digital Wallets (eSewa / Khalti / FonePay)"]
+        ERP["Wholesale Hardware Supplier ERP / CRM Sync"]
+        PORTAL["Government Portals (Inland Revenue Department - IRD Nepal)"]
+    end
+
+    subgraph L5["Layer 5: Security & Compliance Layer"]
+        RBAC["Role-Based Access Control (Admin vs. Staff Access)"]
+        ENC["AES Data Encryption at Rest & TLS in Transit"]
+        AUDIT["Immutable Audit Trails (Auto-Stamped Staff Name & Nepal Time)"]
+        GAAP["Accounting Standards Compliance (GAAP, IFRS, NAS)"]
+    end
+
+    subgraph L6["Layer 6: Infrastructure Layer (Hosting & DevOps)"]
+        CLOUD["Cloud Hosting (Render Production / AWS / Azure / GCP)"]
+        STANDALONE["Windows Offline Desktop Engine (Local Machine)"]
+        CONTAINER["Docker Containers & Gunicorn High-Concurrency Workers"]
+        CICD["Inno Setup Installer Wizard & GitHub Actions CI/CD"]
+    end
+
+    L1 -->|"User Interaction & Form Submissions"| L2
+    L2 -->|"CRUD & Transaction Commit"| L3
+    L2 -->|"Reconciliation & Invoicing"| L4
+    L2 -->|"Enforce Permissions & Policy"| L5
+    L3 & L5 -->|"Host Environment & Scaling"| L6
+```
+
+### 6.2 End-to-End Accounting Flow
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Staff as Workshop Staff / Admin
+    participant UI as Presentation Layer (UI)
+    participant Core as Application & Ledger Engine
+    participant AR as Accounts Receivable (AR)
+    participant GL as General Ledger (Double-Entry)
+    participant DB as Persistent Data Store
+    participant Report as Financial Reporting Engine
+
+    Staff->>UI: Enters Customer Sale or Repair Job with Due Balance
+    UI->>Core: Validates item price, inventory stock, and customer terms
+    Core->>AR: Posts outstanding balance to Accounts Receivable
+    Core->>GL: Posts balanced journal entry (Debit Cash/AR, Credit Sales Revenue, Debit COGS, Credit Inventory)
+    GL->>DB: Stores transaction with immutable staffName & Nepal Kathmandu timestamp
+    DB-->>Report: Emits real-time data event
+    Report->>UI: Refreshes Financial KPIs, P&L Statement, and Balance Sheet instantly
+```
+
+### 6.3 Standard Chart of Accounts (COA) Structure
+
+| Account Code | Account Head Name | Account Type | Normal Balance | Usage in Moharain Electronics |
+| :--- | :--- | :--- | :--- | :--- |
+| **`1010`** | **Cash on Hand** | Current Asset | **Debit** | Physical counter cash received from POS sales and customer repair settlements. |
+| **`1020`** | **Bank / Digital Wallet** | Current Asset | **Debit** | Shop bank accounts and mobile wallet balances (eSewa, Khalti, FonePay QR). |
+| **`1100`** | **Accounts Receivable (AR)** | Current Asset | **Debit** | Unpaid customer repair balances and credit hardware sales awaiting collection. |
+| **`1200`** | **Inventory Asset** | Current Asset | **Debit** | Total cost value of shelf hardware, electronic components, and replacement spare parts. |
+| **`2000`** | **Accounts Payable (AP)** | Current Liability | **Credit** | Unpaid vendor and supplier bills for wholesale parts purchases. |
+| **`2100`** | **Customer Advances** | Current Liability | **Credit** | Upfront cash deposits paid by customers upon repair ticket intake before job completion. |
+| **`3010`** | **Owner's Equity & Capital** | Equity | **Credit** | Initial shop investment capital and accumulated retained business earnings. |
+| **`4010`** | **Retail Sales Revenue** | Operating Revenue | **Credit** | Gross income generated from counter hardware sales. |
+| **`4020`** | **Repair Service Revenue** | Operating Revenue | **Credit** | Gross income generated from customer device repairs and servicing labor. |
+| **`5010`** | **Cost of Goods Sold (COGS)** | Direct Expense | **Debit** | Wholesale purchase cost of sold components and spare parts consumed in repairs. |
+| **`6010`** | **Shop Rent Expense** | Operating Expense | **Debit** | Monthly commercial premises rent for Hasanpur workshop. |
+| **`6020`** | **Electricity & Utilities** | Operating Expense | **Debit** | Nepal Electricity Authority (NEA) commercial meter bills and workshop water. |
+| **`6030`** | **Technician Salaries & Wages**| Operating Expense | **Debit** | Monthly staff salaries, overtime allowances, and technician wages. |
+| **`6040`** | **Workshop Tools & Supplies** | Operating Expense | **Debit** | Soldering wire, flux, tester probes, heat shrink, and workshop consumables. |
+| **`6050`** | **Transport & Fuel** | Operating Expense | **Debit** | Component pickup transport, courier fees, and delivery vehicle fuel. |
+| **`6090`** | **Miscellaneous Expenses** | Operating Expense | **Debit** | Tea, client refreshments, cleaning supplies, and minor shop maintenance. |
+
+---
+
+### 6.4 Complete Financial Statements Suite
+
+1. **Statement of Profit & Loss (Income Statement):**
+   - **Gross Turnover:** Retail Sales Revenue + Repair Service Revenue
+   - **Cost of Goods Sold (COGS):** Wholesale cost of sold items and parts
+   - **Gross Operating Profit:** $\text{Turnover} - \text{COGS}$ ($\text{Gross Margin} = \frac{\text{Gross Profit}}{\text{Turnover}} \times 100$)
+   - **Operating Expenses:** Rent, Utilities, Wages, Tools, Transport, Misc
+   - **Net Operating Profit / (Loss):** $\text{Gross Profit} - \text{Operating Expenses}$
+
+2. **Balance Sheet (Statement of Financial Position):**
+   - **Current Assets:** Cash on Hand + Bank / Mobile Wallets + Accounts Receivable + Inventory Stock Valuation
+   - **Current Liabilities:** Accounts Payable (Vendor Bills) + Customer Advance Deposits
+   - **Owner's Equity:** Retained Earnings & Working Capital
+   - **Fundamental Balance Equation:**
+     $$\\mathbf{\text{Assets} = \text{Liabilities} + \text{Equity}}$$
+
+3. **Statement of Cash Flows:**
+   - **Cash Inflows:** Cash POS counter sales, repair settlements, AR customer collections.
+   - **Cash Outflows:** Supplier payments, shop rent, NEA electricity bills, staff payroll, tool purchases.
+   - **Net Operating Cash Flow:** $\text{Cash Inflows} - \text{Cash Outflows}$.
+
+4. **Nepal Tax & Compliance (VAT 13% & PAN Invoicing):**
+   - Output VAT calculated at standard **13%** on taxable retail turnover.
+   - Input VAT credit on wholesale parts invoices.
+   - Net VAT payable to Government of Nepal Inland Revenue Department (IRD).
+   - Official PAN billing header (PAN: `601928374`).
