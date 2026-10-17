@@ -547,6 +547,7 @@
       <button class="nav-btn active" id="nav-btn-catalog" onclick="switchTab('catalog', this)">Inventory &amp; Tracking</button>
       <button class="nav-btn" id="nav-btn-add-item" onclick="switchTab('add-item', this)">+ Add Electronic Item</button>
       <button class="nav-btn" id="nav-btn-repairs" onclick="switchTab('repairs', this)">Repair Items &amp; Jobs</button>
+      <button class="nav-btn" id="nav-btn-accounting" onclick="switchTab('accounting', this)" style="background:rgba(37,99,235,0.1);border-color:#3b82f6;font-weight:700;">🏛️ Accounting &amp; Ledger</button>
       <button class="nav-btn" id="nav-btn-reports" onclick="switchTab('reports', this)">Reporting &amp; Alerts</button>
       <button class="nav-btn" id="nav-btn-backup" onclick="switchTab('backup', this)">Data &amp; Backup</button>
       <button class="nav-btn" id="nav-btn-security" onclick="switchTab('security', this)">Security &amp; Install</button>
@@ -581,6 +582,14 @@
         <div class="kpi-label">Active Repair Jobs</div>
         <div class="kpi-value" id="kpi-active-repairs" style="color:#2563eb;">0</div>
         <div class="kpi-sub">Devices currently in workshop</div>
+      </div>
+      <div class="kpi-card" style="cursor:pointer;background:linear-gradient(135deg, #ffffff 0%, #eff6ff 100%);border-color:#93c5fd;" onclick="switchTab('accounting', document.getElementById('nav-btn-accounting'))" title="Click to open Accounting & Ledger">
+        <div class="kpi-label" style="display:flex;justify-content:space-between;align-items:center;">
+          <span>Net Profit &amp; Accounting</span>
+          <span style="font-size:0.75rem;color:#1e40af;font-weight:700;">Open 🏛️</span>
+        </div>
+        <div class="kpi-value" id="kpi-main-net-profit" style="color:#16a34a;">Rs. 0.00</div>
+        <div class="kpi-sub" style="color:#1e40af;font-weight:600;">8 Financial Modules Active &rarr;</div>
       </div>
     </section>
 
@@ -2935,6 +2944,21 @@
 
       document.getElementById('kpi-low-stock').textContent = lowStockCount;
       document.getElementById('kpi-active-repairs').textContent = activeRepairsCount;
+
+      const mainProfitEl = document.getElementById('kpi-main-net-profit');
+      if (mainProfitEl) {
+        const totalSalesRevenue = items.reduce((s, i) => s + (Number(i.salesRevenue) || 0), 0);
+        const totalRepairRevenue = repairs.reduce((s, r) => s + (Number(r.repairCost) || 0), 0);
+        const totalRevenue = totalSalesRevenue + totalRepairRevenue;
+        const invCogs = items.reduce((s, i) => s + ((Number(i.soldQuantity) || 0) * (Number(i.unitPrice || 0) * 0.70)), 0);
+        const repairCogs = repairs.reduce((s, r) => s + ((r.partsUsed || []).length * 450), 0);
+        const totalCogs = Math.round((invCogs + repairCogs) * 100) / 100;
+        const grossProfit = Math.round((totalRevenue - totalCogs) * 100) / 100;
+        const totalOpExpenses = (expenses || []).reduce((s, e) => s + (Number(e.amount) || 0), 0) +
+                                (payrollRecords || []).reduce((s, p) => s + (Number(p.netPayable) || 0), 0);
+        const netProfit = Math.round((grossProfit - totalOpExpenses) * 100) / 100;
+        mainProfitEl.textContent = formatCurrency(netProfit);
+      }
     }
 
     function renderCatalog() {
